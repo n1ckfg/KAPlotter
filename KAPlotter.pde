@@ -7,7 +7,8 @@ KACombo kaCombo;
 PShape shp;
 ArrayList<PVector> points;
 
-int counter = 0;
+int refreshInterval = 50000;
+int markTime = 0;
 
 void setup() {
   size(900, 450, P3D);
@@ -24,12 +25,12 @@ void setup() {
   }
 
   kaCombo = new KACombo(points);
+  
+  markTime = millis();
 }
 
 void draw() {
   background(0);
-
-  counter++;
    
   pushMatrix();
   translate(width/2, height/2, -500);
@@ -41,8 +42,8 @@ void draw() {
 
   popMatrix();
 
-  if (counter > 100) { 
-    counter = 0;
+  if (millis() > markTime + refreshInterval) { 
+    markTime = millis();
     kaCombo.init();
   }
   

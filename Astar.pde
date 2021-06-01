@@ -11,79 +11,69 @@ import java.util.Collections;
 class Astar {
   
   ArrayList<Node> nodes;
+  int minEdges = 1;
+  int maxEdges = 3;
+  float avgDistance = 0;
+  ArrayList<PVector> outputPoints;
+  PVector inputCentroid;
   
-  //h scores is the stright-line distance from the current city to Bucharest
-  Astar() {
+  // h score is the straight-line distance from the current point to the centroid
+  Astar(ArrayList<PVector> _points, PVector _centroid) {
     nodes = new ArrayList<Node>();
+    outputPoints = new ArrayList<PVector>();
     
-    //initialize the graph base on the Romania map
-    Node n1 = new Node("Arad", 366);
-    Node n2 = new Node("Zerind", 374);
-    Node n3 = new Node("Oradea", 380);
-    Node n4 = new Node("Sibiu", 253);
-    Node n5 = new Node("Fagaras", 178);
-    Node n6 = new Node("Rimnicu Vilcea", 193);
-    Node n7 = new Node("Pitesti", 98);
-    Node n8 = new Node("Timisoara", 329);
-    Node n9 = new Node("Lugoj", 244);
-    Node n10 = new Node("Mehadia", 241);
-    Node n11 = new Node("Drobeta", 242);
-    Node n12 = new Node("Craiova", 160);
-    Node n13 = new Node("Bucharest", 0);
-    Node n14 = new Node("Giurgiu", 77);
- 
-    //initialize the edges
-    //Arad
-    n1.adjacencies = new Edge[] { new Edge(n2,75), new Edge(n4,140), new Edge(n8,118) };
-     
-    //Zerind
-    n2.adjacencies = new Edge[] { new Edge(n1,75), new Edge(n3,71) };
+    nodes.add(new Node("0", 0)); // centroid
+    
+    for (int i=0; i<_points.size(); i++) {
+      float distance = _points.get(i).dist(_centroid);
+      avgDistance += distance;
+      nodes.add(new Node("" + (i+1), distance));
+    }
+    
+    avgDistance /= points.size();
+    
+    for (int i=0; i<nodes.size(); i++) {
+      Node node = nodes.get(i);
+      int numEdges = int(random(minEdges, maxEdges+1));
 
-    //Oradea
-    n3.adjacencies = new Edge[] { new Edge(n2,71), new Edge(n4,151) };
-     
-    //Sibiu
-    n4.adjacencies = new Edge[] { new Edge(n1,140), new Edge(n5,99), new Edge(n3,151), new Edge(n6,80) };
+      Edge[] edges = new Edge[numEdges];
+      for (int j=0; j<edges.length; j++) {
+        int whichNode = int(random(nodes.size()));
+        edges[j] = new Edge(nodes.get(whichNode), avgDistance);
+      }
+      node.adjacencies = edges;
+    }
 
-    //Fagaras
-    n5.adjacencies = new Edge[] { new Edge(n4,99), new Edge(n13,211) }; // 178
-     
-    //Rimnicu Vilcea
-    n6.adjacencies = new Edge[] { new Edge(n4,80), new Edge(n7,97), new Edge(n12,146) };
-     
-    //Pitesti
-    n7.adjacencies = new Edge[] { new Edge(n6,97), new Edge(n13,101), new Edge(n12,138) };
-     
-    //Timisoara
-    n8.adjacencies = new Edge[] { new Edge(n1,118), new Edge(n9,111) };
-     
-    //Lugoj
-    n9.adjacencies = new Edge[] { new Edge(n8,111), new Edge(n10,70) };
+    AstarSearch(nodes.get(0), nodes.get(nodes.size()-1));
 
-    //Mehadia
-    n10.adjacencies = new Edge[] { new Edge(n9,70), new Edge(n11,75) };
-     
-    //Drobeta
-    n11.adjacencies = new Edge[] { new Edge(n10,75), new Edge(n12,120) };
-
-    //Craiova
-    n12.adjacencies = new Edge[] { new Edge(n11,120), new Edge(n6,146), new Edge(n7,138) };
-
-    //Bucharest
-    n13.adjacencies = new Edge[] { new Edge(n7,101), new Edge(n14,90), new Edge(n5,211) };
-     
-    //Giurgiu
-    n14.adjacencies = new Edge[] { new Edge(n13,90) };
-
-    AstarSearch(n1, n14);
-
-    List<Node> path = printPath(n13);
-
-    println("Path: " + path);
+    ArrayList<Node> path = printPath(nodes.get(nodes.size()-1));
+    
+    if (path.size() > 0) {
+      for (int i=0; i<path.size(); i++) {
+        int index = int(path.get(i).value);
+        if (index < _points.size()) outputPoints.add(_points.get(index));
+      }
+    }
   }
 
-  List<Node> printPath(Node target) {
-    List<Node> path = new ArrayList<Node>();
+  void draw() {
+    strokeWeight(0.002);
+    stroke(255, 180);
+    noFill();
+    beginShape(LINES);
+    for (int j=0; j<outputPoints.size(); j++) {
+      PVector p = outputPoints.get(j);
+      vertex(p.x, p.y, p.z);
+    }
+    endShape();  
+  }
+
+  void run() {
+    draw();
+  }
+
+  ArrayList<Node> printPath(Node target) {
+    ArrayList<Node> path = new ArrayList<Node>();
   
     for (Node node = target; node!=null; node = node.parent) {
         path.add(node);
