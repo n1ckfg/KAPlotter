@@ -35,7 +35,7 @@ class Particle {
     colorB = curCentroid.colorB;
   }
 
-  void drawParticle() {
+  void draw() {
     pushMatrix();
     translate(position.x, position.y);
     noStroke();    

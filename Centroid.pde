@@ -12,7 +12,7 @@ class Centroid {
     internalIndex = _internalIndex;
   }
 
-  void Tick(ArrayList<Particle> _particles) {
+  void update(ArrayList<Particle> _particles) {
     //println("-----------------------");
     //println("K-Means Centroid Tick");
     // move the centroid to its new position
@@ -34,7 +34,7 @@ class Centroid {
     position = newPosition;
   }
 
-  void drawCentroid() {
+  void draw() {
     pushMatrix();
 
     translate(position.x, position.y);
