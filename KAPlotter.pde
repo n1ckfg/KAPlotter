@@ -2,8 +2,7 @@ import peasy.PeasyCam;
 
 PeasyCam cam;
 
-Kmeans kmeans;
-Astar astar;
+KACombo kaCombo;
 
 PShape shp;
 ArrayList<PVector> points;
@@ -24,8 +23,7 @@ void setup() {
     }
   }
 
-  kmeans = new Kmeans(points);
-  astar = new Astar();
+  kaCombo = new KACombo(points);
 }
 
 void draw() {
@@ -39,13 +37,13 @@ void draw() {
   rotateX(radians(180));
   rotateY(radians(90));
 
-  kmeans.run();
+  kaCombo.run();
 
   popMatrix();
 
   if (counter > 100) { 
     counter = 0;
-    kmeans.init();
+    kaCombo.init();
   }
   
   surface.setTitle(""+frameRate);
