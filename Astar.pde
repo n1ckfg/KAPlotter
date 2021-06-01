@@ -8,10 +8,14 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Astar {
+class Astar {
+  
+  ArrayList<Node> nodes;
   
   //h scores is the stright-line distance from the current city to Bucharest
   Astar() {
+    nodes = new ArrayList<Node>();
+    
     //initialize the graph base on the Romania map
     Node n1 = new Node("Arad", 366);
     Node n2 = new Node("Zerind", 374);
