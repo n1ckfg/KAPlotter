@@ -8,12 +8,10 @@ Astar astar;
 PShape shp;
 ArrayList<PVector> points;
 
-int depth;
 int counter = 0;
 
 void setup() {
   size(900, 450, P3D);
-  depth = (width + height) / 2;
 
   cam = new PeasyCam(this, 400);
   

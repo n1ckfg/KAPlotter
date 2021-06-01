@@ -4,7 +4,6 @@ class Kmeans {
 
   ArrayList<Particle> particles;
   ArrayList<Centroid> centroids;
-  int numberOfParticles = 4096; //128;
   int numberOfCentroids = 32;
   float minX = 0;
   float maxX = 0;
@@ -109,7 +108,7 @@ class Centroid {
     pushMatrix();
 
     translate(position.x, position.y, position.z);
-    strokeWeight(0.002);
+    strokeWeight(0.01);
     stroke(colorR, colorG, colorB);
     point(0,0);
     
@@ -126,6 +125,7 @@ class Particle {
   PVector velocity;
   int centroidIndex;
   float colorR, colorG, colorB;
+  float brightness = 0.8;
 
   Particle(PVector _position) {
     position = _position;
@@ -152,9 +152,9 @@ class Particle {
 
     // and grab the color for the visualization    
     Centroid curCentroid = _centroids.get(centroidIndex);
-    colorR = curCentroid.colorR;
-    colorG = curCentroid.colorG;
-    colorB = curCentroid.colorB;
+    colorR = curCentroid.colorR * brightness;
+    colorG = curCentroid.colorG * brightness;
+    colorB = curCentroid.colorB * brightness;
   }
 
   void draw() {

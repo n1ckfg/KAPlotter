@@ -75,7 +75,7 @@ class Astar {
     //Giurgiu
     n14.adjacencies = new Edge[] { new Edge(n13,90) };
 
-    AstarSearch(n1, n13);
+    AstarSearch(n1, n14);
 
     List<Node> path = printPath(n13);
 
