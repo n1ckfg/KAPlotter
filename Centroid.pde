@@ -5,7 +5,7 @@ class Centroid {
   int internalIndex;
 
   Centroid(int _internalIndex, float _r, float _g, float _b) {
-    position = new PVector(random(width) - width/2, random(height) - height/2);
+    position = new PVector(random(width) - width/2, random(height) - height/2, random(depth) - depth/2);
     colorR = _r;
     colorG = _g;
     colorB = _b;
@@ -37,11 +37,11 @@ class Centroid {
   void draw() {
     pushMatrix();
 
-    translate(position.x, position.y);
-    noStroke();
-    fill(colorR, colorG, colorB, 128);
-    ellipse(0, 0, 20, 20);
-
+    translate(position.x, position.y, position.z);
+    strokeWeight(20);
+    stroke(colorR, colorG, colorB);
+    point(0,0);
+    
     popMatrix();
   }
   

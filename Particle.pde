@@ -6,7 +6,7 @@ class Particle {
   float colorR, colorG, colorB;
 
   Particle() {
-    position = new PVector(random(width) - width/2, random(height) - height/2);
+    position = new PVector(random(width) - width/2, random(height) - height/2, random(depth) - depth/2);
   }
 
   void FindClosestCentroid(ArrayList<Centroid> _centroids) {
@@ -37,10 +37,10 @@ class Particle {
 
   void draw() {
     pushMatrix();
-    translate(position.x, position.y);
-    noStroke();    
-    fill(colorR, colorG, colorB, 255);
-    ellipse(0, 0, 5, 5);
+    translate(position.x, position.y, position.z);
+    strokeWeight(4);
+    stroke(colorR, colorG, colorB);
+    point(0, 0);
     popMatrix();
   }
   

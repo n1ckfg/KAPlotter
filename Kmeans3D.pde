@@ -4,8 +4,9 @@ import peasy.PeasyCam;
 
 PeasyCam cam;
 
-int numberOfParticles = 128;
-int numberOfCentroids = 6;
+int depth;
+int numberOfParticles = 4096; //128;
+int numberOfCentroids = 32;
 
 int counter = 0;
 
@@ -14,7 +15,7 @@ ArrayList<Centroid> centroids;
 
 void setup() {
   size(900, 450, P3D);
-  background(0);
+  depth = (width + height) / 2;
 
   particles = new ArrayList<Particle>();
   centroids = new ArrayList<Centroid>();
