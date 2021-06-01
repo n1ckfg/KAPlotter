@@ -11,6 +11,9 @@ class Kmeans {
   float maxY = 0;
   float minZ = 0;
   float maxZ = 0;
+  float totalStability = 0;
+  float stableThreshold = 0.001;
+  boolean ready = false;
 
   Kmeans(ArrayList<PVector> _points) {
     particles = new ArrayList<Particle>();
@@ -30,7 +33,8 @@ class Kmeans {
     init();
   }
   
-  void init() {    
+  void init() {  
+    ready = false;
     centroids.clear();
   
     for (int i = 0; i < numberOfCentroids; i++) {
@@ -43,10 +47,17 @@ class Kmeans {
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).FindClosestCentroid(centroids);
     }  
-  
+    
+    totalStability = 0;
+    
     for (int i = 0; i < centroids.size(); i++) {
-      centroids.get(i).update(particles);
+      Centroid c = centroids.get(i);
+      c.update(particles);
+      if (c.stability > 0) totalStability += c.stability;
     }
+    
+    if (totalStability < stableThreshold) ready = true;
+    //println(totalStability + " " + ready);
   }
   
   void draw() {
@@ -60,7 +71,7 @@ class Kmeans {
   }
   
   void run() {
-    update();
+    if (!ready) update();
     draw();
   }
 
@@ -73,6 +84,7 @@ class Centroid {
   PVector position;
   float colorR, colorG, colorB;
   int internalIndex;
+  float stability;
 
   Centroid(int _internalIndex, float _r, float _g, float _b, float _minX, float _maxX, float _minY, float _maxY, float _minZ, float _maxZ) {
     position = new PVector(random(_minX, _maxX), random(_minY, _maxY), random(_minZ, _maxZ));
@@ -80,6 +92,7 @@ class Centroid {
     colorG = _g;
     colorB = _b;
     internalIndex = _internalIndex;
+    stability = -1;
   }
 
   void update(ArrayList<Particle> _particles) {
@@ -101,6 +114,7 @@ class Centroid {
     }
 
     newPosition.div(numberOfAssociatedParticles);
+    stability = position.dist(newPosition);
     position = newPosition;
   }
 
