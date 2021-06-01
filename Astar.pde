@@ -12,8 +12,11 @@ class Astar {
   
   ArrayList<Node> nodes;
   int minEdges = 1;
-  int maxEdges = 3;
+  int maxEdges = 4;
+  int minPathLength = 4;
+  int searchReps = 10;
   float avgDistance = 0;
+  float weightScale = 10;
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
   
@@ -32,26 +35,28 @@ class Astar {
     
     avgDistance /= points.size();
     
-    for (int i=0; i<nodes.size(); i++) {
-      Node node = nodes.get(i);
-      int numEdges = int(random(minEdges, maxEdges+1));
-
-      Edge[] edges = new Edge[numEdges];
-      for (int j=0; j<edges.length; j++) {
-        int whichNode = int(random(nodes.size()));
-        edges[j] = new Edge(nodes.get(whichNode), avgDistance);
+    for (int h=0; h<searchReps; h++) {
+      for (int i=0; i<nodes.size(); i++) {
+        Node node = nodes.get(i);
+        int numEdges = int(random(minEdges, maxEdges+1));
+  
+        Edge[] edges = new Edge[numEdges];
+        for (int j=0; j<edges.length; j++) {
+          int whichNode = int(random(nodes.size()));
+          edges[j] = new Edge(nodes.get(whichNode), random(avgDistance/weightScale, avgDistance*weightScale)); // weights are all equal
+        }
+        node.adjacencies = edges;
       }
-      node.adjacencies = edges;
-    }
-
-    AstarSearch(nodes.get(0), nodes.get(nodes.size()-1));
-
-    ArrayList<Node> path = printPath(nodes.get(nodes.size()-1));
     
-    if (path.size() > 0) {
-      for (int i=0; i<path.size(); i++) {
-        int index = int(path.get(i).value);
-        if (index < _points.size()) outputPoints.add(_points.get(index));
+      AstarSearch(nodes.get(0), nodes.get(nodes.size()-1));
+  
+      ArrayList<Node> path = printPath(nodes.get(nodes.size()-1));
+      
+      if (path.size() >= minPathLength) {
+        for (int i=0; i<path.size(); i++) {
+          int index = int(path.get(i).value);
+          if (index < _points.size()) outputPoints.add(_points.get(index));
+        }
       }
     }
   }

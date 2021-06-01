@@ -2,6 +2,7 @@ class KACombo {
   
   Kmeans kmeans;
   ArrayList<Astar> astars;
+  boolean astarsGenerated = false;
   
   KACombo(ArrayList<PVector> _points) {
     kmeans = new Kmeans(_points);
@@ -11,17 +12,16 @@ class KACombo {
   void run() {
     kmeans.run();
 
-    for (int i=0; i<astars.size(); i++) {
-      astars.get(i).run();
-    }
-
-    if (kmeans.ready) {
+    if (kmeans.ready && !astarsGenerated) {
       for (int i=0; i<kmeans.clusters.size(); i++) {
         Cluster cluster = kmeans.clusters.get(i);
         astars.add(new Astar(cluster.points, cluster.centroid));
       }
-      
-      kmeans.ready = false;
+      astarsGenerated = true;
+    }
+
+    for (int i=0; i<astars.size(); i++) {
+      astars.get(i).run();
     }
   }
   
