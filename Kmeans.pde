@@ -6,24 +6,37 @@ class Kmeans {
   ArrayList<Centroid> centroids;
   int numberOfParticles = 4096; //128;
   int numberOfCentroids = 32;
+  float minX = 0;
+  float maxX = 0;
+  float minY = 0;
+  float maxY = 0;
+  float minZ = 0;
+  float maxZ = 0;
 
-  Kmeans() {
+  Kmeans(ArrayList<PVector> _points) {
     particles = new ArrayList<Particle>();
     centroids = new ArrayList<Centroid>();
+    
+    for (int i=0; i<_points.size(); i++) {
+      PVector p = _points.get(i);
+      if (p.x < minX) minX = p.x;
+      if (p.x > maxX) maxX = p.x;
+      if (p.y < minY) minY = p.y;
+      if (p.y > maxY) maxY = p.y;
+      if (p.z < minZ) minZ = p.z;
+      if (p.z > maxZ) maxZ = p.z;
+      particles.add(new Particle(p));
+    }
     
     init();
   }
   
   void init() {    
-    particles.clear(); 
     centroids.clear();
-    
-    for (int i = 0; i < numberOfParticles; i++) {
-      particles.add(new Particle());
-    }
   
     for (int i = 0; i < numberOfCentroids; i++) {
-      centroids.add(new Centroid(i, 127+random(127), 127+random(127), 127+random(127)));
+      Centroid c = new Centroid(i, 127+random(127), 127+random(127), 127+random(127), minX, maxX, minY, maxY, minZ, maxZ);
+      centroids.add(c);
     }
   }
 
@@ -62,8 +75,8 @@ class Centroid {
   float colorR, colorG, colorB;
   int internalIndex;
 
-  Centroid(int _internalIndex, float _r, float _g, float _b) {
-    position = new PVector(random(width) - width/2, random(height) - height/2, random(depth) - depth/2);
+  Centroid(int _internalIndex, float _r, float _g, float _b, float _minX, float _maxX, float _minY, float _maxY, float _minZ, float _maxZ) {
+    position = new PVector(random(_minX, _maxX), random(_minY, _maxY), random(_minZ, _maxZ));
     colorR = _r;
     colorG = _g;
     colorB = _b;
@@ -96,7 +109,7 @@ class Centroid {
     pushMatrix();
 
     translate(position.x, position.y, position.z);
-    strokeWeight(20);
+    strokeWeight(0.002);
     stroke(colorR, colorG, colorB);
     point(0,0);
     
@@ -114,8 +127,8 @@ class Particle {
   int centroidIndex;
   float colorR, colorG, colorB;
 
-  Particle() {
-    position = new PVector(random(width) - width/2, random(height) - height/2, random(depth) - depth/2);
+  Particle(PVector _position) {
+    position = _position;
   }
 
   void FindClosestCentroid(ArrayList<Centroid> _centroids) {
@@ -147,7 +160,7 @@ class Particle {
   void draw() {
     pushMatrix();
     translate(position.x, position.y, position.z);
-    strokeWeight(4);
+    strokeWeight(0.004);
     stroke(colorR, colorG, colorB);
     point(0, 0);
     popMatrix();
