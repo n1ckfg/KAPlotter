@@ -20,8 +20,9 @@ class Astar {
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
   
-  // h score is the straight-line distance from the current point to the centroid
+  // h-score is the straight-line distance from the current point to the centroid
   Astar(ArrayList<PVector> _points, PVector _centroid) {
+    inputCentroid = _centroid;
     nodes = new ArrayList<Node>();
     outputPoints = new ArrayList<PVector>();
     

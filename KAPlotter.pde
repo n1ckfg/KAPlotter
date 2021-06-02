@@ -38,7 +38,7 @@ void draw() {
 
   if (millis() > markTime + refreshInterval) { 
     markTime = millis();
-    kaCombo.init();
+    //kaCombo.init();
   }
   
   surface.setTitle(""+frameRate);
