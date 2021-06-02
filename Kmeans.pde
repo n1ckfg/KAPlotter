@@ -6,7 +6,7 @@ class Kmeans {
   ArrayList<Centroid> centroids;
   ArrayList<Cluster> clusters;
   
-  int numberOfCentroids = 32;
+  int numberOfCentroids;
   float minX = 0;
   float maxX = 0;
   float minY = 0;
@@ -14,10 +14,11 @@ class Kmeans {
   float minZ = 0;
   float maxZ = 0;
   float totalStability = 0;
-  float stableThreshold = 0.001;
+  float stableThreshold = 0.0001;
   boolean ready = false;
 
-  Kmeans(ArrayList<PVector> _points) {
+  Kmeans(ArrayList<PVector> _points, int _numCentroids) {
+    numberOfCentroids = _numCentroids;
     particles = new ArrayList<Particle>();
     centroids = new ArrayList<Centroid>();
     clusters = new ArrayList<Cluster>();
@@ -138,7 +139,7 @@ class Centroid {
     pushMatrix();
 
     translate(position.x, position.y, position.z);
-    strokeWeight(0.01);
+    strokeWeight(10);
     stroke(colorR, colorG, colorB);
     point(0,0);
     
@@ -190,7 +191,7 @@ class Particle {
   void draw() {
     pushMatrix();
     translate(position.x, position.y, position.z);
-    strokeWeight(0.004);
+    strokeWeight(2);
     stroke(colorR, colorG, colorB);
     point(0, 0);
     popMatrix();

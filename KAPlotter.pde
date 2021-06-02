@@ -9,22 +9,24 @@ ArrayList<PVector> points;
 
 int refreshInterval = 50000;
 int markTime = 0;
+float scaler = -1000;
 
 void setup() {
   size(900, 450, P3D);
 
   cam = new PeasyCam(this, 400);
   
-  shp = loadShape("battle_pod_tri.obj");
+  shp = loadShape("test.obj");
   points = new ArrayList<PVector>();
   for (int i=0; i<shp.getChildCount(); i++) {
     PShape child = shp.getChild(i);
     for (int j=0; j<child.getVertexCount(); j++) {
-      points.add(child.getVertex(j));
+      PVector p = child.getVertex(j).mult(scaler);
+      points.add(p);
     }
   }
 
-  kaCombo = new KACombo(points);
+  kaCombo = new KACombo(points, 40);
   
   markTime = millis();
 }
@@ -32,15 +34,7 @@ void setup() {
 void draw() {
   background(0);
    
-  pushMatrix();
-  translate(width/2, height/2, -500);
-  scale(1000, 1000, 1000);
-  rotateX(radians(180));
-  rotateY(radians(90));
-
   kaCombo.run();
-
-  popMatrix();
 
   if (millis() > markTime + refreshInterval) { 
     markTime = millis();

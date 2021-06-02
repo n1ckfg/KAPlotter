@@ -14,7 +14,7 @@ class Astar {
   int minEdges = 1;
   int maxEdges = 4;
   int minPathLength = 4;
-  int searchReps = 10;
+  int searchReps = 20;
   float avgDistance = 0;
   float weightScale = 10;
   ArrayList<PVector> outputPoints;
@@ -62,7 +62,7 @@ class Astar {
   }
 
   void draw() {
-    strokeWeight(0.002);
+    strokeWeight(2);
     stroke(255, 180);
     noFill();
     beginShape(LINES);

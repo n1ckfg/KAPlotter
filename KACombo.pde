@@ -4,8 +4,8 @@ class KACombo {
   ArrayList<Astar> astars;
   boolean astarsGenerated = false;
   
-  KACombo(ArrayList<PVector> _points) {
-    kmeans = new Kmeans(_points);
+  KACombo(ArrayList<PVector> _points, int _numCentroids) {
+    kmeans = new Kmeans(_points, _numCentroids);
     astars = new ArrayList<Astar>();
   }
 
