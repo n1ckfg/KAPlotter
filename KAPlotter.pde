@@ -26,7 +26,7 @@ void setup() {
     }
   }
 
-  kaCombo = new KACombo(points, 40);
+  kaCombo = new KACombo(points, 400);
   
   markTime = millis();
 }
