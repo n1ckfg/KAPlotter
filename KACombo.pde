@@ -43,7 +43,7 @@ class KACombo {
         nodeIndices.add(i);
       }
     }
-
+    
     String nodePositions = "";
     for (int i=0; i<nodeIndices.size(); i++) {
       Astar astar = astars.get(nodeIndices.get(i));
@@ -56,21 +56,22 @@ class KACombo {
       }
      }
     
+    // note that the label names just use an incremental number, not the index of the Astar object
     String nodeLabels = "";
     for (int i=0; i<nodeIndices.size(); i++) {
       if (i == nodeIndices.size()-1) {
-        nodeLabels += "" + nodeIndices.get(i);
+        nodeLabels += "" + i;
       } else {
-        nodeLabels += nodeIndices.get(i) + ", ";
+        nodeLabels += i + ", ";
       }
     }
 
     String linkLabels = "";
     for (int i=0; i<nodeIndices.size(); i++) {
       if (i == nodeIndices.size()-1) {
-        linkLabels += "\"" + nodeIndices.get(i) + ";" + nodeIndices.get(0) + "\"";
+        linkLabels += "\"" + i + ";" + 0 + "\"";
       } else {
-        linkLabels += "\"" + nodeIndices.get(i) + ";" + nodeIndices.get(i+1) + "\"" + ", ";
+        linkLabels += "\"" + i + ";" + (i+1) + "\"" + ", ";
       }
     }
     String[]linkLabelsArray = linkLabels.split(", ");
