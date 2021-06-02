@@ -34,37 +34,43 @@ class KACombo {
   void write(String _fileName) {
     ArrayList<String> s = new ArrayList<String>();
     
-    String nodePositions = "";
-    int nodeCounter = 0;
+    // clean the list first
+    ArrayList<Integer> nodeIndices = new ArrayList<Integer>();
     for (int i=0; i<astars.size(); i++) {
-      PVector p = astars.get(i).inputCentroid.copy().mult(outputScaler);
-      if (!Float.isNaN(p.x) && !Float.isNaN(p.y) && !Float.isNaN(p.z)) {
-        nodeCounter++;
-        String ps = "[" + p.x + ", " + p.y + ", " + p.z + "]";
-        if (i == astars.size()-1) {
-          nodePositions += ps;
-        } else {
-          nodePositions += ps + ", ";
-        }
+      Astar astar = astars.get(i);
+      PVector p = astar.inputCentroid;
+      if (!Float.isNaN(p.x) && !Float.isNaN(p.y) && !Float.isNaN(p.z) && astar.outputPoints.size() > 0) {
+        nodeIndices.add(i);
       }
     }
+
+    String nodePositions = "";
+    for (int i=0; i<nodeIndices.size(); i++) {
+      Astar astar = astars.get(nodeIndices.get(i));
+      PVector p = astar.inputCentroid.copy().mult(outputScaler);
+      String ps = "[" + p.x + ", " + p.y + ", " + p.z + "]";
+      if (i == nodeIndices.size()-1) {
+        nodePositions += ps;
+      } else {
+        nodePositions += ps + ", ";
+      }
+     }
     
     String nodeLabels = "";
-    for (int i=0; i<nodeCounter; i++) {
-      if (i == nodeCounter-1) {
-        nodeLabels += "" + i;
+    for (int i=0; i<nodeIndices.size(); i++) {
+      if (i == nodeIndices.size()-1) {
+        nodeLabels += "" + nodeIndices.get(i);
       } else {
-        nodeLabels += i + ", ";
+        nodeLabels += nodeIndices.get(i) + ", ";
       }
     }
 
     String linkLabels = "";
-    String[] nodeLabelsArray = nodeLabels.split(",");
-    for (int i=0; i<nodeLabelsArray.length; i++) {
-      if (i == nodeLabelsArray.length-1) {
-        linkLabels += "\"" + i + ";" + 0 + "\"";
+    for (int i=0; i<nodeIndices.size(); i++) {
+      if (i == nodeIndices.size()-1) {
+        linkLabels += "\"" + nodeIndices.get(i) + ";" + nodeIndices.get(0) + "\"";
       } else {
-        linkLabels += "\"" + i + ";" + (i+1) + "\"" + ", ";
+        linkLabels += "\"" + nodeIndices.get(i) + ";" + nodeIndices.get(i+1) + "\"" + ", ";
       }
     }
     String[]linkLabelsArray = linkLabels.split(", ");
