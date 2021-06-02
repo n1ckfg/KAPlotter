@@ -17,6 +17,7 @@ class KACombo {
         Cluster cluster = kmeans.clusters.get(i);
         astars.add(new Astar(cluster.points, cluster.centroid));
       }
+      write("output.json");
       astarsGenerated = true;
     }
 
@@ -27,6 +28,13 @@ class KACombo {
   
   void init() {
     kmeans.init();
+  }
+  
+  void write(String _fileName) {
+    ArrayList<String> FINAL_OUTPUT = new ArrayList<String>();
+    FINAL_OUTPUT.add("{");   
+    FINAL_OUTPUT.add("}");   
+    saveStrings(_fileName, FINAL_OUTPUT.toArray(new String[FINAL_OUTPUT.size()]));
   }
 
 }
