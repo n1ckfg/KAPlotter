@@ -35,45 +35,38 @@ class KACombo {
     ArrayList<String> s = new ArrayList<String>();
     
     // clean the list first
-    ArrayList<Integer> nodeIndices = new ArrayList<Integer>();
-    for (int i=0; i<astars.size(); i++) {
+    for (int i=astars.size()-1; i>=0; i--) {
       Astar astar = astars.get(i);
       PVector p = astar.inputCentroid;
-      if (!Float.isNaN(p.x) && !Float.isNaN(p.y) && !Float.isNaN(p.z) && astar.outputPoints.size() > 0) {
-        nodeIndices.add(i);
+      if (Float.isNaN(p.x) || Float.isNaN(p.y) || Float.isNaN(p.z) || astar.outputPoints.size() <= 0) {
+        astars.remove(i);
       }
     }
     
     String nodePositions = "";
-    for (int i=0; i<nodeIndices.size(); i++) {
-      Astar astar = astars.get(nodeIndices.get(i));
+    String nodeLabels = "";
+    for (int i=0; i<astars.size(); i++) {
+      Astar astar = astars.get(i);
       PVector p = astar.inputCentroid.copy().mult(outputScaler);
       String ps = "[" + p.x + ", " + p.y + ", " + p.z + "]";
-      if (i == nodeIndices.size()-1) {
+      if (i == astars.size()-1) {
         nodePositions += ps;
-      } else {
-        nodePositions += ps + ", ";
-      }
-     }
-    
-    // note that the label names just use an incremental number, not the index of the Astar object
-    String nodeLabels = "";
-    for (int i=0; i<nodeIndices.size(); i++) {
-      if (i == nodeIndices.size()-1) {
         nodeLabels += "" + i;
       } else {
+        nodePositions += ps + ", ";
         nodeLabels += i + ", ";
       }
-    }
+     }
 
     String linkLabels = "";
-    for (int i=0; i<nodeIndices.size(); i++) {
-      if (i == nodeIndices.size()-1) {
+    for (int i=0; i<astars.size(); i++) {
+      if (i == astars.size()-1) {
         linkLabels += "\"" + i + ";" + 0 + "\"";
       } else {
         linkLabels += "\"" + i + ";" + (i+1) + "\"" + ", ";
       }
     }
+
     String[]linkLabelsArray = linkLabels.split(", ");
     
     s.add("{");  
