@@ -13,12 +13,14 @@ class Astar {
   ArrayList<Node> nodes;
   int minEdges = 1;
   int maxEdges = 4;
-  int minPathLength = 4;
-  int searchReps = 20;
+  int minPathLength = 1;
+  int searchReps = 10;
   float avgDistance = 0;
-  float weightScale = 2;
+  float weightScale = 10;
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
+  int smoothReps = 10;
+  int splitReps = 2;
   
   // h-score is the straight-line distance from the current point to the centroid
   Astar(ArrayList<PVector> _points, PVector _centroid) {
@@ -34,7 +36,9 @@ class Astar {
       nodes.add(new Node("" + (i+1), distance));
     }
     
-    avgDistance /= points.size();
+    if (_points.size() > 0) {
+      avgDistance /= _points.size();
+    }
     
     for (int h=0; h<searchReps; h++) {
       for (int i=0; i<nodes.size(); i++) {
@@ -60,13 +64,15 @@ class Astar {
         }
       }
     }
+
+    refine();
   }
 
   void draw() {
     strokeWeight(2);
-    stroke(255, 180);
+    stroke(255, 127);
     noFill();
-    beginShape(LINES);
+    beginShape(TRIANGLE_STRIP);
     for (int j=0; j<outputPoints.size(); j++) {
       PVector p = outputPoints.get(j);
       vertex(p.x, p.y, p.z);
@@ -78,6 +84,44 @@ class Astar {
     draw();
   }
 
+  void smoothStroke() {
+        float weight = 18;
+        float scale = 1.0 / (weight + 2);
+        int nPointsMinusTwo = outputPoints.size() - 2;
+        PVector lower, upper, center;
+
+        for (int i = 1; i < nPointsMinusTwo; i++) {
+            lower = outputPoints.get(i-1);
+            center = outputPoints.get(i);
+            upper = outputPoints.get(i+1);
+
+            center.x = (lower.x + weight * center.x + upper.x) * scale;
+            center.y = (lower.y + weight * center.y + upper.y) * scale;
+        }
+  }
+
+  void splitStroke() {
+    for (int i = 1; i < outputPoints.size(); i+=2) {
+      PVector center = outputPoints.get(i);
+      PVector lower = outputPoints.get(i-1);
+      float x = (center.x + lower.x) / 2;
+      float y = (center.y + lower.y) / 2;
+      float z = (center.z + lower.z) / 2;
+      PVector p = new PVector(x, y, z);
+      outputPoints.add(i, p);
+    }
+  }
+
+  void refine() {
+    for (int i=0; i<splitReps; i++) {
+      splitStroke();  
+      smoothStroke();  
+    }
+    for (int i=0; i<smoothReps - splitReps; i++) {
+      smoothStroke();    
+     }
+  }
+  
   ArrayList<Node> printPath(Node target) {
     ArrayList<Node> path = new ArrayList<Node>();
   
