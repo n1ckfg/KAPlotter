@@ -2,7 +2,7 @@ import peasy.PeasyCam;
 
 PeasyCam cam;
 
-KACombo[] kaCombos = new KACombo[3];
+KAMulti kaMulti;
 
 PShape shp;
 ArrayList<PVector> points;
@@ -26,9 +26,7 @@ void setup() {
     }
   }
 
-  kaCombos[0] = new KACombo(points, 20);
-  kaCombos[1] = new KACombo(points, 80);
-  kaCombos[2] = new KACombo(points, 200);
+  kaMulti = new KAMulti(points, 3, 40);
   
   markTime = millis();
 }
@@ -36,15 +34,11 @@ void setup() {
 void draw() {
   background(0);
    
-  for(int i=0; i<kaCombos.length; i++) {
-    kaCombos[i].run();
-  }
+  kaMulti.run();
 
   if (millis() > markTime + refreshInterval) { 
     markTime = millis();
-    for(int i=0; i<kaCombos.length; i++) {
-      //kaCombos[i].init();
-    }
+    //kaMulti.init();
   }
   
   surface.setTitle(""+frameRate);

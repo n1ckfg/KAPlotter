@@ -13,10 +13,10 @@ class Astar {
   ArrayList<Node> nodes;
   int minEdges = 1;
   int maxEdges = 4;
-  int minPathLength = 1;
+  int minPathLength = 5;
   int searchReps = 10;
   float avgDistance = 0;
-  float weightScale = 2;
+  float weightScale = 10;
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
   int smoothReps = 10;

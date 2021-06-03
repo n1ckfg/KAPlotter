@@ -18,7 +18,7 @@ class KACombo {
         Cluster cluster = kmeans.clusters.get(i);
         astars.add(new Astar(cluster.points, cluster.centroid));
       }
-      write("output.json");
+      //writeNetwork("output.json");
       astarsGenerated = true;
     }
 
@@ -31,7 +31,7 @@ class KACombo {
     kmeans.init();
   }
   
-  void write(String _fileName) {
+  void writeNetwork(String _fileName) {
     ArrayList<String> s = new ArrayList<String>();
     
     // clean the list first
