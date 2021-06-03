@@ -16,7 +16,7 @@ class Astar {
   int minPathLength = 1;
   int searchReps = 10;
   float avgDistance = 0;
-  float weightScale = 10;
+  float weightScale = 2;
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
   int smoothReps = 10;
