@@ -4,6 +4,7 @@ class Kmeans {
 
   ArrayList<Particle> particles;
   ArrayList<Centroid> centroids;
+  ArrayList<PVector> centroidFinalPositions;
   ArrayList<Cluster> clusters;
   
   int numberOfCentroids;
@@ -21,6 +22,7 @@ class Kmeans {
     numberOfCentroids = _numCentroids;
     particles = new ArrayList<Particle>();
     centroids = new ArrayList<Centroid>();
+    centroidFinalPositions = new ArrayList<PVector>();
     clusters = new ArrayList<Cluster>();
     
     for (int i=0; i<_points.size(); i++) {
@@ -63,7 +65,9 @@ class Kmeans {
     
     if (totalStability < stableThreshold) {
       for (int i=0; i<centroids.size(); i++) {
-        clusters.add(new Cluster(centroids.get(i).position));
+        PVector p = centroids.get(i).position;
+        clusters.add(new Cluster(p));
+        centroidFinalPositions.add(p);
       }
       
       for (int i=0; i<particles.size(); i++) {
