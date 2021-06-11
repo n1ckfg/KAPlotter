@@ -4,11 +4,9 @@ class Sorter {
   int smoothReps = 10;
   int splitReps = 2;
   
-  Sorter() {
+  Sorter(ArrayList<PVector> _points, int _root) {
     points = new ArrayList<PVector>();
-  }
   
-  void init(ArrayList<PVector> _points, int _root) {
     ArrayList<PVector> input = new ArrayList<PVector>();
     for (int i=0; i<_points.size(); i++) {
       input.add(_points.get(i).copy());

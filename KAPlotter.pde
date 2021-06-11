@@ -26,7 +26,7 @@ void setup() {
     }
   }
 
-  kaMulti = new KAMulti(points, 3, 40);
+  kaMulti = new KAMulti(points, 1, 40);
   
   markTime = millis();
 }
