@@ -70,7 +70,7 @@ class Astar {
 
   void draw() {
     strokeWeight(2);
-    stroke(255, 127);
+    stroke(255, 127, 0, 127);
     noFill();
     beginShape(TRIANGLE_STRIP);
     for (int j=0; j<outputPoints.size(); j++) {

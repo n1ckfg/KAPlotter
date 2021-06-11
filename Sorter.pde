@@ -38,7 +38,7 @@ class Sorter {
   
   void draw() {
     strokeWeight(2);
-    stroke(255, 127);
+    stroke(0, 127, 255, 127);
     noFill();
     beginShape(TRIANGLE_STRIP);
     for (int i=0; i<points.size(); i++) {
