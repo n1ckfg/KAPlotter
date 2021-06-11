@@ -11,11 +11,7 @@ class KAComboSet {
     kaCombos = new KACombo[iterations];
     
     for (int i=0; i<kaCombos.length; i++) {
-      if (i == 0) {
-        kaCombos[i] = new KACombo(_points, interval * (i+1), true, true); // one sorter layer
-      } else {
-        kaCombos[i] = new KACombo(_points, interval * (i+1), true, false); // no sorter layers
-      }
+        kaCombos[i] = new KACombo(_points, interval * (i+1));
     }
   }
 

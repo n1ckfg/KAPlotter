@@ -12,8 +12,8 @@ class Astar {
   
   ArrayList<Node> nodes;
   int minEdges = 1;
-  int maxEdges = 4;
-  int minPathLength = 5;
+  int maxEdges = 3;
+  int minPathLength = 4;
   int searchReps = 10;
   float avgDistance = 0;
   float weightScale = 10;

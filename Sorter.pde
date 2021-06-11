@@ -1,8 +1,9 @@
 class Sorter {
   
   ArrayList<PVector> points;
-  int smoothReps = 10;
-  int splitReps = 2;
+  int smoothReps = 20;
+  int splitReps = 3;
+  float addOdds = 0.1;
   
   Sorter(ArrayList<PVector> _points, int _root) {
     points = new ArrayList<PVector>();
@@ -27,12 +28,13 @@ class Sorter {
           shortestDistanceIndex = i;
         }
       }
+      
       root = input.get(shortestDistanceIndex);
-      points.add(root);
+      if (random(1) < addOdds) points.add(root);
       input.remove(shortestDistanceIndex);
       counter--;
     }
-    
+        
     refine();
   }
   
