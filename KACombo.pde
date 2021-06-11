@@ -23,7 +23,7 @@ class KACombo {
     }
 
     for (int i=0; i<astars.size(); i++) {
-      astars.get(i).run();
+      //astars.get(i).run();
     }
   }
   

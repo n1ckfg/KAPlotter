@@ -3,8 +3,10 @@ class KAMulti {
   int iterations, interval;
   boolean latkGenerated;
   KACombo[] kaCombos;
+  Sorter sorter;
   
   KAMulti(ArrayList<PVector>_points, int _iterations, int _interval) {
+    sorter = new Sorter();
     latkGenerated = false;
     iterations = _iterations;
     interval = _interval;
@@ -22,9 +24,14 @@ class KAMulti {
       if (!kaCombos[i].astarsGenerated) ready = false;
     }
     if (ready && !latkGenerated) {
+      // * * *
+      sorter.init(kaCombos[0].kmeans.centroidFinalPositions, 0);
+      // * * *
       writeLatk();
       latkGenerated = true;
     }
+    
+    sorter.run();
   }
   
   void init() {

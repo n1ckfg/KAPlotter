@@ -85,19 +85,19 @@ class Astar {
   }
 
   void smoothStroke() {
-        float weight = 18;
-        float scale = 1.0 / (weight + 2);
-        int nPointsMinusTwo = outputPoints.size() - 2;
-        PVector lower, upper, center;
+    float weight = 18;
+    float scale = 1.0 / (weight + 2);
+    int nPointsMinusTwo = outputPoints.size() - 2;
+    PVector lower, upper, center;
 
-        for (int i = 1; i < nPointsMinusTwo; i++) {
-            lower = outputPoints.get(i-1);
-            center = outputPoints.get(i);
-            upper = outputPoints.get(i+1);
+    for (int i = 1; i < nPointsMinusTwo; i++) {
+      lower = outputPoints.get(i-1);
+      center = outputPoints.get(i);
+      upper = outputPoints.get(i+1);
 
-            center.x = (lower.x + weight * center.x + upper.x) * scale;
-            center.y = (lower.y + weight * center.y + upper.y) * scale;
-        }
+      center.x = (lower.x + weight * center.x + upper.x) * scale;
+      center.y = (lower.y + weight * center.y + upper.y) * scale;
+    }
   }
 
   void splitStroke() {
