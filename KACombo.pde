@@ -2,28 +2,45 @@ class KACombo {
   
   Kmeans kmeans;
   ArrayList<Astar> astars;
-  boolean astarsGenerated = false;
+  ArrayList<Sorter> sorters;
+  boolean useAstars;
+  boolean useSorters;
+  boolean secondaryGenerated = false;
   float outputScaler = 0.1;
   
-  KACombo(ArrayList<PVector> _points, int _numCentroids) {
+  KACombo(ArrayList<PVector> _points, int _numCentroids, boolean _useAstars, boolean _useSorters) {
+    useAstars = _useAstars;
+    useSorters = _useSorters;
     kmeans = new Kmeans(_points, _numCentroids);
     astars = new ArrayList<Astar>();
+    sorters = new ArrayList<Sorter>();
   }
 
   void run() {
     kmeans.run();
 
-    if (kmeans.ready && !astarsGenerated) {
+    if (kmeans.ready && !secondaryGenerated) {
       for (int i=0; i<kmeans.clusters.size(); i++) {
         Cluster cluster = kmeans.clusters.get(i);
-        astars.add(new Astar(cluster.points, cluster.centroid));
+        if (cluster.points.size() > 1) {
+          if (useAstars) astars.add(new Astar(cluster.points, cluster.centroid));
+          if (useSorters) sorters.add(new Sorter(cluster.points, 0));
+        }
       }
       //writeNetwork("output.json");
-      astarsGenerated = true;
+      secondaryGenerated = true;
     }
 
-    for (int i=0; i<astars.size(); i++) {
-      astars.get(i).run();
+    if (useAstars) {
+      for (int i=0; i<astars.size(); i++) {
+        astars.get(i).run();
+      }
+    }  
+
+    if (useSorters) {
+      for (int i=0; i<sorters.size(); i++) {
+        sorters.get(i).run();
+      }
     }
   }
   
