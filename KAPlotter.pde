@@ -11,6 +11,9 @@ int refreshInterval = 50000;
 int markTime = 0;
 float scaler = -1000;
 
+int globalSmoothReps = 200;
+int globalSplitReps = 4;
+  
 void setup() {
   size(900, 450, P3D);
 

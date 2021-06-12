@@ -1,9 +1,9 @@
 class Sorter {
   
   ArrayList<PVector> points;
-  int smoothReps = 20;
-  int splitReps = 3;
-  float addOdds = 0.1;
+  int smoothReps = globalSmoothReps;
+  int splitReps = globalSplitReps;
+  float addOdds = 0.05;
   
   Sorter(ArrayList<PVector> _points, int _root) {
     points = new ArrayList<PVector>();

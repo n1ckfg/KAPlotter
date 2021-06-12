@@ -21,7 +21,9 @@ class KACombo {
         if (cluster.points.size() > 1) {
           Sorter sorter = new Sorter(cluster.points, 0);
           sorters.add(sorter);
-          Astar astar = new Astar(cluster.points, cluster.centroid);
+          // these get slightly different aesthetic results
+          //Astar astar = new Astar(cluster.points, cluster.centroid);
+          Astar astar = new Astar(sorter.points, cluster.centroid);
           //Astar astar = new Astar(sorter.points, sorter.points.get(0));
           astars.add(astar);
         }

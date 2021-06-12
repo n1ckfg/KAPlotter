@@ -82,12 +82,14 @@ class Kmeans {
   }
   
   void draw() {
-    for (int i = 0; i < particles.size(); i++) {
-      particles.get(i).draw();
-    }  
-  
-    for (int i = 0; i < centroids.size(); i++) {
-      centroids.get(i).draw();
+    if (!ready) {
+      for (int i = 0; i < particles.size(); i++) {
+        particles.get(i).draw();
+      }  
+    
+      for (int i = 0; i < centroids.size(); i++) {
+        centroids.get(i).draw();
+      }
     }
   }
   

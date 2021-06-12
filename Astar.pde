@@ -19,9 +19,10 @@ class Astar {
   float weightScale = 10;
   ArrayList<PVector> outputPoints;
   PVector inputCentroid;
-  int smoothReps = 10;
-  int splitReps = 2;
-  
+  int smoothReps = globalSmoothReps;
+  int splitReps = globalSplitReps;
+  float addOdds = 0.8;
+
   // h-score is the straight-line distance from the current point to the centroid
   Astar(ArrayList<PVector> _points, PVector _centroid) {
     inputCentroid = _centroid;
@@ -60,7 +61,7 @@ class Astar {
       if (path.size() >= minPathLength) {
         for (int i=0; i<path.size(); i++) {
           int index = int(path.get(i).value);
-          if (index < _points.size()) outputPoints.add(_points.get(index));
+          if (index < _points.size() && random(1) < addOdds) outputPoints.add(_points.get(index));
         }
       }
     }
