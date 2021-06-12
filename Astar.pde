@@ -21,7 +21,7 @@ class Astar {
   PVector inputCentroid;
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
-  float addOdds = 0.8;
+  float addOdds = 0.4;
 
   // h-score is the straight-line distance from the current point to the centroid
   Astar(ArrayList<PVector> _points, PVector _centroid) {

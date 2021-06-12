@@ -3,7 +3,7 @@ class Sorter {
   ArrayList<PVector> points;
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
-  float addOdds = 0.05;
+  float addOdds = 0.1;
   
   Sorter(ArrayList<PVector> _points, int _root) {
     points = new ArrayList<PVector>();
