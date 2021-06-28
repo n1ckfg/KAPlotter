@@ -18,7 +18,7 @@ void setup() {
 
   cam = new PeasyCam(this, 400);
   
-  pc = new PointCloud("test.obj");
+  pc = new PointCloud("epoch_199_fake_B.binvox");
 
   kaComboSet = new KAComboSet(pc.points, 3, 40);
   
