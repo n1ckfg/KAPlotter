@@ -1,3 +1,5 @@
+import latkProcessing.*;
+
 class PointCloud {
   
   ArrayList<PVector> points;
@@ -9,7 +11,7 @@ class PointCloud {
         loadFromShape(url);
         break;
       case "binvox":
-        loadFromBinvox(url, 128);
+        loadFromBinvox(url);
         break;
       default:
         loadFromShape(url);
@@ -18,6 +20,11 @@ class PointCloud {
     
   }
 
+  String getExtension(String url) {
+    String[] extensionArray = url.split("\\."); // Period needs to be escaped for Java split method
+    return extensionArray[extensionArray.length-1].toLowerCase();
+  }
+  
   void loadFromShape(String url) {
     points = new ArrayList<PVector>();
     PShape shp = loadShape(url);
@@ -30,17 +37,46 @@ class PointCloud {
     }  
   }
 
-  String getExtension(String url) {
-    String[] extensionArray = url.split("\\."); // Period needs to be escaped for Java split method
-    return extensionArray[extensionArray.length-1].toLowerCase();
+  void loadFromlatk(String url) {
+    
   }
-
-  public void loadFromBinvox(String url, int dim) {
+  
+  void loadFromBinvox(String url) {
     points = new ArrayList<PVector>();
     byte bytesData[] = loadBytes(url);
     int readpos = 0;
+    int dimpos = 0;
+    int dimX = 0;
+    int dimY = 0;
+    int dimZ = 0;
+    
     
     for (int i = 0; i < bytesData.length; i++) {
+      if (dimpos == 0 && (char) bytesData[i] == 'd' && (char) bytesData[i+1] == 'i' && (char) bytesData[i+2] == 'm') {
+        dimpos = i+4;
+        int dimCounter = 0;
+        String tempDim = "";
+        while (dimCounter < 3) {
+          if ((char) bytesData[dimpos] == ' ') {
+            dimCounter++;
+            switch (dimCounter) {
+              case 1:
+                dimX = int(tempDim);
+                break;
+              case 2:
+                dimY = int(tempDim);
+                break;
+              case 3:
+                dimZ = int(tempDim);
+                break;
+            }
+          } else {
+            tempDim += (char) bytesData[dimpos];
+            dimpos++;
+          }
+        }
+        println("Found dimensions " + dimX + " " + dimY + " " + dimZ);
+      }
       if ((char) bytesData[i] == 'd' && (char) bytesData[i+1] == 'a' && (char) bytesData[i+2] == 't' && (char) bytesData[i+3] == 'a') {
         readpos = i + 5;
         break;
@@ -50,9 +86,9 @@ class PointCloud {
     int voxpos = 0;
     int x = 0, y = 0, z = 0;
     //int numVoxels = 0;
-    int[][][] voxels = new int[dim][dim][dim];
+    int[][][] voxels = new int[dimX][dimY][dimZ];
     
-    while (voxpos < dim * dim * dim) {
+    while (voxpos < dimX * dimY * dimZ) {
       int cell = bytesData[readpos] & 0xff;
       int sequence = bytesData[readpos+1] & 0xff;
       
@@ -63,17 +99,17 @@ class PointCloud {
   
           z += 1;
   
-          if (z == dim) {
+          if (z == dimZ) {
             z = 0;
             y += 1;
           }
   
-          if (y == dim) {
+          if (y == dimY) {
             y = 0;
             x += 1;
           }
   
-          if (x == dim) {
+          if (x == dimX) {
             x = 0;
           }
         }
@@ -82,9 +118,9 @@ class PointCloud {
       }
     }
     
-    for (int xx = 0; xx < dim; xx++) {
-      for (int yy = 0; yy < dim; yy++) {
-        for (int zz = 0; zz < dim; zz++) {
+    for (int xx = 0; xx < dimX; xx++) {
+      for (int yy = 0; yy < dimY; yy++) {
+        for (int zz = 0; zz < dimZ; zz++) {
           if (voxels[xx][yy][zz] == 1) {
             points.add(new PVector(xx, yy, zz));
           }
@@ -93,6 +129,8 @@ class PointCloud {
     }
   }
 
+  // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+  
   String strVertex(float x, float y, float z) {
     return "v " + x + ".0 " + y + ".0 " + z + ".0";
   }
@@ -101,7 +139,7 @@ class PointCloud {
     return "f " + a + " " + b + " " + c;
   }
   
-  public void saveAsObj(String url) {
+  void saveAsObjCubes(String url) {
     String[] vertices = new String[points.size()*24];
     String[] faces = new String[points.size()*12];
     int index = 0;   
@@ -152,6 +190,43 @@ class PointCloud {
     
     String[] lines = concat(vertices, faces);
     saveStrings(url, lines);
+  }
+
+  void saveAsObjPlanes(String url) {
+    String[] vertices = new String[points.size()*4];
+    String[] faces = new String[points.size()*2];
+    int index = 0;   
+
+    for (int i=0; i<points.size(); i++) {
+      PVector p = points.get(i);
+      float x = p.x;
+      float y = p.y;
+      float z = p.z;
+      vertices[4*index] = strVertex(y, x+1, z);
+      vertices[4*index+1] = strVertex(y, x+1, z+1);
+      vertices[4*index+2] = strVertex(y, x, z);
+      vertices[4*index+3] = strVertex(y, x, z+1);
+      faces[2*index] = strFace(1+index*4, 3+index*4, 4+index*4);
+      faces[2*index+1] = strFace(1+index*4, 4+index*4, 2+index*4);
+      index += 1;
+    }
+    
+    String[] lines = concat(vertices, faces);
+    saveStrings(url, lines);
+  }
+  
+  void saveAsObjPoints(String url) {
+    String[] vertices = new String[points.size()];
+
+    for (int i=0; i<points.size(); i++) {
+      PVector p = points.get(i);
+      float x = p.x;
+      float y = p.y;
+      float z = p.z;
+      vertices[i] = strVertex(y, x, z);
+    }
+    
+    saveStrings(url, vertices);
   }
   
 }
