@@ -18,10 +18,10 @@ void setup() {
 
   cam = new PeasyCam(this, 400);
   
-  pc = new PointCloud("epoch_199_fake_B.binvox");
+  pc = new PointCloud("test.binvox");
   //pc.saveAsObjPlanes("test2.obj");
 
-  kaComboSet = new KAComboSet(pc.points, 3, 40);
+  kaComboSet = new KAComboSet(pc.points, 3, 20);
   
   markTime = millis();
 }
