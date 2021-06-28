@@ -4,8 +4,7 @@ PeasyCam cam;
 
 KAComboSet kaComboSet;
 
-PShape shp;
-ArrayList<PVector> points;
+PointCloud pc;
 
 int refreshInterval = 50000;
 int markTime = 0;
@@ -19,17 +18,9 @@ void setup() {
 
   cam = new PeasyCam(this, 400);
   
-  shp = loadShape("test.obj");
-  points = new ArrayList<PVector>();
-  for (int i=0; i<shp.getChildCount(); i++) {
-    PShape child = shp.getChild(i);
-    for (int j=0; j<child.getVertexCount(); j++) {
-      PVector p = child.getVertex(j).mult(scaler);
-      points.add(p);
-    }
-  }
+  pc = new PointCloud("test.obj");
 
-  kaComboSet = new KAComboSet(points, 3, 40);
+  kaComboSet = new KAComboSet(pc.points, 3, 40);
   
   markTime = millis();
 }
