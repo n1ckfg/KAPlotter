@@ -22,9 +22,11 @@ class Astar {
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
   float addOdds = 0.4;
+  RDP rdp;
 
   // h-score is the straight-line distance from the current point to the centroid
   Astar(ArrayList<PVector> _points, PVector _centroid) {
+    rdp = new RDP();
     inputCentroid = _centroid;
     nodes = new ArrayList<Node>();
     outputPoints = new ArrayList<PVector>();
@@ -118,6 +120,9 @@ class Astar {
       splitStroke();  
       smoothStroke();  
     }
+
+    outputPoints = rdp.douglasPeucker(outputPoints, globalRdpEpsilon);
+
     for (int i=0; i<smoothReps - splitReps; i++) {
       smoothStroke();    
      }

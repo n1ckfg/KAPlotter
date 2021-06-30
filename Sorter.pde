@@ -4,10 +4,12 @@ class Sorter {
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
   float addOdds = 0.1;
+  RDP rdp;
   
   Sorter(ArrayList<PVector> _points, int _root) {
+    rdp = new RDP();
     points = new ArrayList<PVector>();
-  
+    
     ArrayList<PVector> input = new ArrayList<PVector>();
     for (int i=0; i<_points.size(); i++) {
       input.add(_points.get(i).copy());
@@ -87,6 +89,9 @@ class Sorter {
       splitStroke();  
       smoothStroke();  
     }
+    
+    points = rdp.douglasPeucker(points, globalRdpEpsilon);
+
     for (int i=0; i<smoothReps - splitReps; i++) {
       smoothStroke();    
      }
