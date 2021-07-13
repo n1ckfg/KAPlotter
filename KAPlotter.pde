@@ -12,7 +12,7 @@ float scaler = -1000;
 
 int globalSmoothReps = 400;
 int globalSplitReps = 4;
-float globalRdpEpsilon = 1;
+float globalRdpEpsilon = 5;
 
 void setup() {
   size(900, 450, P3D);
@@ -22,7 +22,7 @@ void setup() {
   pc = new PointCloud("test.obj");
   //pc.saveAsObjPlanes("test2.obj");
 
-  kaComboSet = new KAComboSet(pc.points, 3, 20);
+  kaComboSet = new KAComboSet(pc.points, 1, 50);
   
   markTime = millis();
 }
