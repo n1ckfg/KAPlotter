@@ -12,14 +12,14 @@ float scaler = -1000;
 
 int globalSmoothReps = 400;
 int globalSplitReps = 4;
-float globalRdpEpsilon = 5;
+float globalRdpEpsilon = 0.8;
 
 void setup() {
   size(900, 450, P3D);
 
   cam = new PeasyCam(this, 400);
   
-  pc = new PointCloud("test.obj");
+  pc = new PointCloud("test_2_fake_B.binvox");
   //pc.saveAsObjPlanes("test2.obj");
 
   kaComboSet = new KAComboSet(pc.points, 1, 50);

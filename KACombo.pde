@@ -20,7 +20,7 @@ class KACombo {
       for (int i=0; i<kmeans.clusters.size(); i++) {
         KCluster cluster = kmeans.clusters.get(i);
         if (cluster.points.size() > 1) {
-          Sorter sorter = new Sorter(cluster.points, 0);
+          Sorter sorter = new Sorter(cluster);
           sorters.add(sorter);
           if (enableAstars) {
             Astar astar = new Astar(sorter.points, cluster.centroid);

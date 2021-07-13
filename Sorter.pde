@@ -3,23 +3,27 @@ class Sorter {
   ArrayList<PVector> points;
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
-  float addOdds = 0.1;
   RDP rdp;
-  
-  Sorter(ArrayList<PVector> _points, int _root) {
+  int increment = 5;
+
+  Sorter(KCluster cluster) {
     rdp = new RDP();
     points = new ArrayList<PVector>();
     
+    Collections.sort(cluster.points, new DistanceComparator(cluster.centroid)); // sort points by distance from centroid
+
     ArrayList<PVector> input = new ArrayList<PVector>();
-    for (int i=0; i<_points.size(); i++) {
-      input.add(_points.get(i).copy());
+    for (int i=0; i<cluster.points.size(); i+=increment) {
+      input.add(cluster.points.get(i).copy());
     }
+       
+    int _root = input.size()-1; // start with the point furthest away from the centroid
     
     PVector root = input.get(_root);
     points.add(root);
     input.remove(_root);
     
-    int counter = _points.size()-1;
+    int counter = input.size()-1;
     while (counter > 0) {
       float shortestDistance = 999999;
       int shortestDistanceIndex = 0;
@@ -32,7 +36,8 @@ class Sorter {
       }
       
       root = input.get(shortestDistanceIndex);
-      if (random(1) < addOdds) points.add(root);
+      //if (random(1) < addOdds) 
+      points.add(root);
       input.remove(shortestDistanceIndex);
       counter--;
     }
@@ -89,7 +94,7 @@ class Sorter {
       splitStroke();  
       smoothStroke();  
     }
-    
+
     points = rdp.douglasPeucker(points, globalRdpEpsilon);
 
     for (int i=0; i<smoothReps - splitReps; i++) {
@@ -101,6 +106,8 @@ class Sorter {
 
 
 // https://forum.processing.org/one/topic/sort-arraylist-with-pvector-on-distance-to-a-point.html
+// example:
+// Collections.sort(points, new DistanceComparator(root));
 
 import java.util.Comparator;
 

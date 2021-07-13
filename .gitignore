@@ -1,3 +1,4 @@
 *.autosave
 output.json
+data/*.binvox
 
