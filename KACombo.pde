@@ -1,6 +1,7 @@
 class KACombo {
   
   Kmeans kmeans;
+  DBSCAN dbscan;
   ArrayList<Sorter> sorters;
   ArrayList<Astar> astars;
   boolean secondaryGenerated = false;
