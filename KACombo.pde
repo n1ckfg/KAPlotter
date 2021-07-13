@@ -5,6 +5,7 @@ class KACombo {
   ArrayList<Astar> astars;
   boolean secondaryGenerated = false;
   float outputScaler = 0.1;
+  boolean enableAstars = false;
   
   KACombo(ArrayList<PVector> _points, int _numCentroids) {
     kmeans = new Kmeans(_points, _numCentroids);
@@ -21,8 +22,10 @@ class KACombo {
         if (cluster.points.size() > 1) {
           Sorter sorter = new Sorter(cluster.points, 0);
           sorters.add(sorter);
-          Astar astar = new Astar(sorter.points, cluster.centroid);
-          astars.add(astar);
+          if (enableAstars) {
+            Astar astar = new Astar(sorter.points, cluster.centroid);
+            astars.add(astar);
+          }
         }
       }
       //writeNetwork("output.json");
@@ -31,7 +34,7 @@ class KACombo {
 
     for (int i=0; i<sorters.size(); i++) {
       sorters.get(i).run();
-      astars.get(i).run();
+      if (enableAstars) astars.get(i).run();
     }
   }
   
