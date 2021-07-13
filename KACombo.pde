@@ -17,7 +17,7 @@ class KACombo {
 
     if (kmeans.ready && !secondaryGenerated) {
       for (int i=0; i<kmeans.clusters.size(); i++) {
-        Cluster cluster = kmeans.clusters.get(i);
+        KCluster cluster = kmeans.clusters.get(i);
         if (cluster.points.size() > 1) {
           Sorter sorter = new Sorter(cluster.points, 0);
           sorters.add(sorter);

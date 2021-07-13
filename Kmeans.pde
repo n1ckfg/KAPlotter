@@ -2,10 +2,10 @@
 
 class Kmeans {
 
-  ArrayList<Particle> particles;
-  ArrayList<Centroid> centroids;
+  ArrayList<KParticle> particles;
+  ArrayList<KCentroid> centroids;
   ArrayList<PVector> centroidFinalPositions;
-  ArrayList<Cluster> clusters;
+  ArrayList<KCluster> clusters;
   
   int numberOfCentroids;
   float minX = 0;
@@ -20,10 +20,10 @@ class Kmeans {
 
   Kmeans(ArrayList<PVector> _points, int _numCentroids) {
     numberOfCentroids = _numCentroids;
-    particles = new ArrayList<Particle>();
-    centroids = new ArrayList<Centroid>();
+    particles = new ArrayList<KParticle>();
+    centroids = new ArrayList<KCentroid>();
     centroidFinalPositions = new ArrayList<PVector>();
-    clusters = new ArrayList<Cluster>();
+    clusters = new ArrayList<KCluster>();
     
     for (int i=0; i<_points.size(); i++) {
       PVector p = _points.get(i);
@@ -33,7 +33,7 @@ class Kmeans {
       if (p.y > maxY) maxY = p.y;
       if (p.z < minZ) minZ = p.z;
       if (p.z > maxZ) maxZ = p.z;
-      particles.add(new Particle(p));
+      particles.add(new KParticle(p));
     }
     
     init();
@@ -45,7 +45,7 @@ class Kmeans {
     clusters.clear();
   
     for (int i = 0; i < numberOfCentroids; i++) {
-      Centroid c = new Centroid(i, 127+random(127), 127+random(127), 127+random(127), minX, maxX, minY, maxY, minZ, maxZ);
+      KCentroid c = new KCentroid(i, 127+random(127), 127+random(127), 127+random(127), minX, maxX, minY, maxY, minZ, maxZ);
       centroids.add(c);
     }
   }
@@ -58,7 +58,7 @@ class Kmeans {
     totalStability = 0;
     
     for (int i = 0; i < centroids.size(); i++) {
-      Centroid c = centroids.get(i);
+      KCentroid c = centroids.get(i);
       c.update(particles);
       if (c.stability > 0) totalStability += c.stability;
     }
@@ -66,12 +66,12 @@ class Kmeans {
     if (totalStability < stableThreshold) {
       for (int i=0; i<centroids.size(); i++) {
         PVector p = centroids.get(i).position;
-        clusters.add(new Cluster(p));
+        clusters.add(new KCluster(p));
         centroidFinalPositions.add(p);
       }
       
       for (int i=0; i<particles.size(); i++) {
-        Particle particle = particles.get(i);
+        KParticle particle = particles.get(i);
         clusters.get(particle.centroidIndex).points.add(particle.position);
       }
       
@@ -102,14 +102,14 @@ class Kmeans {
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-class Centroid {
+class KCentroid {
 
   PVector position;
   float colorR, colorG, colorB;
   int internalIndex;
   float stability;
 
-  Centroid(int _internalIndex, float _r, float _g, float _b, float _minX, float _maxX, float _minY, float _maxY, float _minZ, float _maxZ) {
+  KCentroid(int _internalIndex, float _r, float _g, float _b, float _minX, float _maxX, float _minY, float _maxY, float _minZ, float _maxZ) {
     position = new PVector(random(_minX, _maxX), random(_minY, _maxY), random(_minZ, _maxZ));
     colorR = _r;
     colorG = _g;
@@ -118,9 +118,9 @@ class Centroid {
     stability = -1;
   }
 
-  void update(ArrayList<Particle> _particles) {
+  void update(ArrayList<KParticle> _particles) {
     //println("-----------------------");
-    //println("K-Means Centroid Tick");
+    //println("K-Means KCentroid Tick");
     // move the centroid to its new position
 
     PVector newPosition = new PVector(0.0, 0.0);
@@ -128,7 +128,7 @@ class Centroid {
     float numberOfAssociatedParticles = 0;
 
     for (int i = 0; i < _particles.size(); i++) {
-      Particle curParticle = _particles.get(i);
+      KParticle curParticle = _particles.get(i);
 
       if (curParticle.centroidIndex == internalIndex) {
         newPosition.add(curParticle.position); 
@@ -156,7 +156,7 @@ class Centroid {
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-class Particle {
+class KParticle {
 
   PVector position;
   PVector velocity;
@@ -164,17 +164,17 @@ class Particle {
   float colorR, colorG, colorB;
   float brightness = 0.8;
 
-  Particle(PVector _position) {
+  KParticle(PVector _position) {
     position = _position;
   }
 
-  void FindClosestCentroid(ArrayList<Centroid> _centroids) {
+  void FindClosestCentroid(ArrayList<KCentroid> _centroids) {
     int closestCentroidIndex = 0;
     float closestDistance = 100000;
 
     // find which centroid is the closest
     for (int i = 0; i < _centroids.size(); i++) {      
-      Centroid curCentroid = _centroids.get(i);
+      KCentroid curCentroid = _centroids.get(i);
 
       float distanceCheck = position.dist(curCentroid.position); 
 
@@ -188,7 +188,7 @@ class Particle {
     centroidIndex = closestCentroidIndex;
 
     // and grab the color for the visualization    
-    Centroid curCentroid = _centroids.get(centroidIndex);
+    KCentroid curCentroid = _centroids.get(centroidIndex);
     colorR = curCentroid.colorR * brightness;
     colorG = curCentroid.colorG * brightness;
     colorB = curCentroid.colorB * brightness;
@@ -206,12 +206,12 @@ class Particle {
 }
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- class Cluster {
+ class KCluster {
  
    ArrayList<PVector> points;
    PVector centroid;
    
-   Cluster(PVector _centroid) {
+   KCluster(PVector _centroid) {
      centroid = _centroid;
      points = new ArrayList<PVector>();
    }
