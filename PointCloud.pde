@@ -31,7 +31,7 @@ class PointCloud {
     for (int i=0; i<shp.getChildCount(); i++) {
       PShape child = shp.getChild(i);
       for (int j=0; j<child.getVertexCount(); j++) {
-        PVector p = child.getVertex(j).mult(scaler);
+        PVector p = child.getVertex(j).mult(globalScaler);
         points.add(p);
       }
     }  
@@ -122,7 +122,7 @@ class PointCloud {
       for (int yy = 0; yy < dimY; yy++) {
         for (int zz = 0; zz < dimZ; zz++) {
           if (voxels[xx][yy][zz] == 1) {
-            points.add(new PVector(xx, yy, zz));
+            points.add(new PVector(xx, -zz, yy));
           }
         }
       }

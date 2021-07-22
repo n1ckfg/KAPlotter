@@ -22,7 +22,7 @@ class KAComboSet {
       if (!kaCombos[i].secondaryGenerated) ready = false;
     }
     if (ready && !latkGenerated) {
-      writeLatk();
+      writeToLatk();
       latkGenerated = true;
     }
   }
@@ -33,8 +33,20 @@ class KAComboSet {
     }
   }
   
-  void writeLatk() {
-    // TODO
+  void writeToLatk() {
+    LatkFrame frame = new LatkFrame(parent);
+    for (KACombo kaCombo : kaCombos) {
+      for (Sorter sorter : kaCombo.sorters) {
+        ArrayList<LatkPoint> lpArray = new ArrayList<LatkPoint>();
+        for (PVector p : sorter.points) {
+          LatkPoint lp = new LatkPoint(parent, p.div(globalScaler));
+          lpArray.add(lp);
+        }
+        LatkStroke ls = new LatkStroke(parent, lpArray, color(127));
+        frame.strokes.add(ls);
+      }
+    }
+    latk.layers.get(0).frames.add(frame);    
   }
   
 }
