@@ -39,10 +39,11 @@ class KAComboSet {
       for (Sorter sorter : kaCombo.sorters) {
         ArrayList<LatkPoint> lpArray = new ArrayList<LatkPoint>();
         for (PVector p : sorter.points) {
-          LatkPoint lp = new LatkPoint(parent, p.div(globalScaler));
+          p.y *= -1;
+          LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10));
           lpArray.add(lp);
         }
-        LatkStroke ls = new LatkStroke(parent, lpArray, color(127));
+        LatkStroke ls = new LatkStroke(parent, lpArray, color(127,127,127,255));
         frame.strokes.add(ls);
       }
     }

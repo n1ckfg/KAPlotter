@@ -18,7 +18,7 @@ float globalRdpEpsilon = 0.8;
 
 String[] urls;
 int urlCounter = 0;
-int frameLimit = 25;
+int frameLimit = 999;
 
 PApplet parent;
 
