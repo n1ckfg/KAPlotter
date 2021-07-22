@@ -2,6 +2,7 @@
 
 import java.util.Date;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 String[] filesLoader(String path) {
   File[] files = listFiles(dataPath(path));
@@ -9,6 +10,7 @@ String[] filesLoader(String path) {
   for (int i=0; i < returns.length; i++) {
     returns[i] = files[i].getAbsolutePath();
   }
+  Arrays.sort(returns);
   return returns;
 }
 
