@@ -2,13 +2,21 @@
 
 import java.util.Iterator;
 
-interface DBDataPoint {
-  double distance(DBDataPoint datapoint);
-  void setCluster(int id);
-  int getCluster();
-  int getX();
-  int getY();
+
+class DBDataPoint {
+
+  float distance = 0.0;
+  int clusterId = 0;
+  PVector co = new PVector(0,0,0);
+  
+  DBDataPoint() { }
+
+  DBDataPoint(PVector _point) { 
+    co = _point;
+  }
+
 }
+
 
 class DBCluster {
   
@@ -28,7 +36,7 @@ class DBCluster {
   
   void addPoint(DBDataPoint point) {
     points.add(point);
-    point.setCluster(id);
+    point.clusterId = id;
   }
 
   void setPoints(ArrayList<DBDataPoint> _points) {
@@ -63,23 +71,50 @@ class DBCluster {
 
 }
 
+
 class DBSCAN {
   
   ArrayList<DBDataPoint> points;
   ArrayList<DBCluster> clusters;
   
-  double max_distance;
-  int min_points;
+  float max_distance = 999;
+  int min_points = 1;
   
   boolean[] visited;
   
-  DBSCAN(double _max_distance, int _min_points) {
-    points = new ArrayList<DBDataPoint>();
-    clusters = new ArrayList<DBCluster>();
+  DBSCAN(float _max_distance, int _min_points) {
     max_distance = _max_distance;
-    min_points = _min_points;
+    min_points = _min_points;  
+    init();
+  }
+  
+  DBSCAN(ArrayList<PVector> _points) {
+    init();
+    setPoints(_points);    
+    cluster();
   }
 
+  DBSCAN(ArrayList<PVector> _points, float _max_distance, int _min_points) {
+    max_distance = _max_distance;
+    min_points = _min_points;  
+    init();
+    setPoints(_points);
+    cluster();
+  }
+  
+  void init() {
+    points = new ArrayList<DBDataPoint>();   
+    clusters = new ArrayList<DBCluster>();      
+  }
+  
+  void setPoints(ArrayList<PVector> _points) {
+    for (PVector p : _points) {
+      points.add(new DBDataPoint(p));
+    }
+    
+    visited = new boolean[points.size()];
+  }
+    
   void cluster() {
     Iterator it = points.iterator();
     int n = 0;
@@ -112,7 +147,7 @@ class DBSCAN {
           neighbors.addAll(newNeighbors);
         }
       }
-      if (p.getCluster() == -1) {
+      if (p.clusterId == -1) {
         c.addPoint(p);
       }
     }
@@ -122,7 +157,7 @@ class DBSCAN {
     ArrayList<Integer> neighbors = new ArrayList<Integer>();
     int i = 0;
     for (DBDataPoint point : points) {
-      double distance = d.distance(point);
+      float distance = d.co.dist(point.co);
       
       if (distance <= max_distance) {
         neighbors.add(i);
@@ -131,11 +166,6 @@ class DBSCAN {
     }
     
     return neighbors;
-  }
-
-  void setPoints(ArrayList<DBDataPoint> _points) {
-    points = _points;
-    visited = new boolean[points.size()];
   }
   
 }
