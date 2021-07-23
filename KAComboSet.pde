@@ -1,3 +1,5 @@
+int objOutputCounter = 0;
+
 class KAComboSet {
   
   int iterations, interval;
@@ -47,7 +49,9 @@ class KAComboSet {
         frame.strokes.add(ls);
       }
     }
-    latk.layers.get(0).frames.add(frame);    
+    latk.layers.get(0).frames.add(frame);   
+    pc.saveAsObjPoints("output_" + objOutputCounter + ".obj");
+    objOutputCounter++;
   }
   
 }
