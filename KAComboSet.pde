@@ -4,6 +4,7 @@ class KAComboSet {
   
   int iterations, interval;
   boolean latkGenerated;
+  boolean savePointClouds = false;
   KACombo[] kaCombos;
   
   KAComboSet(ArrayList<PVector>_points, int _iterations, int _interval) {
@@ -50,7 +51,7 @@ class KAComboSet {
       }
     }
     latk.layers.get(0).frames.add(frame);   
-    pc.saveAsObjPoints("output_" + objOutputCounter + ".obj");
+    if (savePointClouds) pc.saveAsObjPoints("output_" + objOutputCounter + ".obj");
     objOutputCounter++;
   }
   

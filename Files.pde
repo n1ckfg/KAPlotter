@@ -9,6 +9,7 @@ String[] filesLoader(String path) {
   String[] returns = new String[files.length];
   for (int i=0; i < returns.length; i++) {
     returns[i] = files[i].getAbsolutePath();
+  println("Found " + returns[i]);
   }
   Arrays.sort(returns);
   return returns;

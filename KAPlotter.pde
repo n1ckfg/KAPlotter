@@ -27,7 +27,7 @@ void setup() {
 
   cam = new PeasyCam(this, 400);
   
-  urls = filesLoader("newtest");
+  urls = filesLoader("input");
   
   parent = this;
   latk = new Latk(parent);
@@ -37,10 +37,10 @@ void setup() {
 
 void draw() {
   background(0);
-   
-  kaComboSet.run();
   
-  if (kaComboSet.latkGenerated) {
+  if (pc.valid) kaComboSet.run();
+  
+  if (!pc.valid || kaComboSet.latkGenerated) {   
     urlCounter++;
     if (urlCounter < urls.length && urlCounter < frameLimit) {
       init();
@@ -56,7 +56,6 @@ void draw() {
 
 void init() {
   pc = new PointCloud(urls[urlCounter]);
-  //pc.saveAsObjPlanes("test2.obj");
   
   kaComboSet = new KAComboSet(pc.points, globalComboIterations, globalComboInterval); 
 }

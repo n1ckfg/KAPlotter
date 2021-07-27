@@ -3,9 +3,12 @@ import latkProcessing.*;
 class PointCloud {
   
   ArrayList<PVector> points;
+  String ext = "unknown";
+  boolean valid = false;
   
   PointCloud(String url) {
-    String ext = getExtension(url);
+    points = new ArrayList<PVector>();
+    ext = getExtension(url);
     switch(ext) {
       case "obj":
         loadFromShape(url);
@@ -14,10 +17,16 @@ class PointCloud {
         loadFromBinvox(url);
         break;
       default:
-        loadFromShape(url);
+        println(ext + " is not a readable 3D object.");
         break;
     }
     
+    valid = points.size() > 0;
+    if (valid) {
+      println("Created point cloud from " + ext + " with " + points.size() + " points.");  
+    } else {
+      println("Point cloud creation from " + url + " failed.");
+    }
   }
 
   String getExtension(String url) {
@@ -28,6 +37,14 @@ class PointCloud {
   void loadFromShape(String url) {
     points = new ArrayList<PVector>();
     PShape shp = loadShape(url);
+
+    // first get root vertices
+    for (int i=0; i<shp.getVertexCount(); i++) {
+      PVector p = shp.getVertex(i).mult(globalScaler);
+      points.add(p);
+    }
+    
+    // then look for child objects
     for (int i=0; i<shp.getChildCount(); i++) {
       PShape child = shp.getChild(i);
       for (int j=0; j<child.getVertexCount(); j++) {
@@ -38,7 +55,7 @@ class PointCloud {
   }
 
   void loadFromlatk(String url) {
-    
+    // TODO
   }
   
   void loadFromBinvox(String url) {
