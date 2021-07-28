@@ -10,11 +10,11 @@ PointCloud pc;
 
 float globalScaler = 1000;
 
-int globalComboIterations = 2;
+int globalComboIterations = 1;
 int globalComboInterval = 50;
 int globalSmoothReps = 400;
-int globalSplitReps = 2;
-float globalRdpEpsilon = 0.5; //0.8;
+int globalSplitReps = 4;
+float globalRdpEpsilon = 0.8; //0.8;
 
 String[] urls;
 int urlCounter = 0;
