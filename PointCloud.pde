@@ -3,11 +3,16 @@ import latkProcessing.*;
 class PointCloud {
   
   ArrayList<PVector> points;
+  ArrayList<Integer> colors;
+  
   String ext = "unknown";
   boolean valid = false;
+  boolean nativeObjHandling = false;
   
   PointCloud(String url) {
     points = new ArrayList<PVector>();
+    colors = new ArrayList<Integer>();
+    
     ext = getExtension(url);
     switch(ext) {
       case "obj":
@@ -23,7 +28,7 @@ class PointCloud {
     
     valid = points.size() > 0;
     if (valid) {
-      println("Created point cloud from " + ext + " with " + points.size() + " points.");  
+      println("Created point cloud from " + ext + " with " + points.size() + " points and " + colors.size() + " colors.");  
     } else {
       println("Point cloud creation from " + url + " failed.");
     }
@@ -36,22 +41,55 @@ class PointCloud {
   
   void loadFromShape(String url) {
     points = new ArrayList<PVector>();
-    PShape shp = loadShape(url);
-
-    // first get root vertices
-    for (int i=0; i<shp.getVertexCount(); i++) {
-      PVector p = shp.getVertex(i).mult(globalScaler);
-      points.add(p);
-    }
     
-    // then look for child objects
-    for (int i=0; i<shp.getChildCount(); i++) {
-      PShape child = shp.getChild(i);
-      for (int j=0; j<child.getVertexCount(); j++) {
-        PVector p = child.getVertex(j).mult(globalScaler);
+    if (ext.equals("obj") && nativeObjHandling) {
+      PShape shp = loadShape(url);
+  
+      // first get root vertices
+      for (int i=0; i<shp.getVertexCount(); i++) {
+        PVector p = shp.getVertex(i).mult(globalScaler);
         points.add(p);
       }
-    }  
+      
+      // then look for child objects
+      for (int i=0; i<shp.getChildCount(); i++) {
+        PShape child = shp.getChild(i);
+        for (int j=0; j<child.getVertexCount(); j++) {
+          PVector p = child.getVertex(j).mult(globalScaler);
+          points.add(p);
+        }
+      }  
+    } else {
+      String[] lines = loadStrings(url);
+
+      switch(ext) {
+        default: // obj 
+          for (String line : lines) {
+            if (line.startsWith("v ")) {
+              String[] words = line.split(" ");
+              
+              float x, y, z, r, g, b;
+              boolean validPos = false;
+              boolean validCol = false;
+              
+              x = float(words[1]);
+              y = float(words[2]);
+              z = float(words[3]);
+              validPos = !Float.isNaN(x) && !Float.isNaN(y) && !Float.isNaN(z);
+              if (validPos) points.add(new PVector(x, y, z));
+
+              if (validPos && words.length > 4) {
+                r = float(words[4]);
+                g = float(words[5]);
+                b = float(words[6]);
+                validCol = !Float.isNaN(r) && !Float.isNaN(g) && !Float.isNaN(b);
+                if (validCol) colors.add(color(r, g, b));
+              }             
+            }
+          }
+          break;
+      }
+    }
   }
 
   void loadFromlatk(String url) {

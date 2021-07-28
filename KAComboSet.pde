@@ -42,7 +42,7 @@ class KAComboSet {
       for (Sorter sorter : kaCombo.sorters) {
         ArrayList<LatkPoint> lpArray = new ArrayList<LatkPoint>();
         for (PVector p : sorter.points) {
-          p.y *= -1;
+          //p.y *= -1;
           LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10));
           lpArray.add(lp);
         }
