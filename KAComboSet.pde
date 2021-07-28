@@ -6,6 +6,7 @@ class KAComboSet {
   boolean latkGenerated;
   boolean savePointClouds = false;
   KACombo[] kaCombos;
+  float saturationChange = 2.0;
   
   KAComboSet(ArrayList<Vert>_points, int _iterations, int _interval) {
     latkGenerated = false;
@@ -42,11 +43,11 @@ class KAComboSet {
       for (Sorter sorter : kaCombo.sorters) {
         ArrayList<LatkPoint> lpArray = new ArrayList<LatkPoint>();
         for (Vert p : sorter.points) {
-          //p.y *= -1;
-          LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10));
+          p.changeSaturation(saturationChange);
+          LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10), p.col);
           lpArray.add(lp);
         }
-        LatkStroke ls = new LatkStroke(parent, lpArray, color(127,127,127,255));
+        LatkStroke ls = new LatkStroke(parent, lpArray, color(127));
         frame.strokes.add(ls);
       }
     }

@@ -84,7 +84,10 @@ class Sorter {
       float x = (center.x + lower.x) / 2;
       float y = (center.y + lower.y) / 2;
       float z = (center.z + lower.z) / 2;
-      Vert p = new Vert(x, y, z);
+      float r = (red(center.col) + red(lower.col)) / 2;
+      float g = (green(center.col) + green(lower.col)) / 2;
+      float b = (blue(center.col) + blue(lower.col)) / 2;
+      Vert p = new Vert(x, y, z, r, g, b);
       points.add(i, p);
     }
   }

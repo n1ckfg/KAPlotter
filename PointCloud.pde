@@ -3,7 +3,6 @@ import latkProcessing.*;
 class PointCloud {
   
   ArrayList<Vert> points;
-  ArrayList<Integer> colors;
   
   String ext = "unknown";
   boolean valid = false;
@@ -11,7 +10,6 @@ class PointCloud {
   
   PointCloud(String url) {
     points = new ArrayList<Vert>();
-    colors = new ArrayList<Integer>();
     
     ext = getExtension(url);
     switch(ext) {
@@ -28,7 +26,7 @@ class PointCloud {
     
     valid = points.size() > 0;
     if (valid) {
-      println("Created point cloud from " + ext + " with " + points.size() + " points and " + colors.size() + " colors.");  
+      println("Created point cloud from " + ext + " with " + points.size() + " points.");  
     } else {
       println("Point cloud creation from " + url + " failed.");
     }
@@ -71,20 +69,27 @@ class PointCloud {
               float x, y, z, r, g, b;
               boolean validPos = false;
               boolean validCol = false;
-              
+                            
               x = float(words[1]);
               y = float(words[2]);
               z = float(words[3]);
+              r = 255;
+              g = 255;
+              b = 255;
               validPos = !Float.isNaN(x) && !Float.isNaN(y) && !Float.isNaN(z);
-              if (validPos) points.add(new Vert(x, y, z));
 
               if (validPos && words.length > 4) {
                 r = float(words[4]);
                 g = float(words[5]);
                 b = float(words[6]);
                 validCol = !Float.isNaN(r) && !Float.isNaN(g) && !Float.isNaN(b);
-                if (validCol) colors.add(color(r, g, b));
-              }             
+              }
+              
+              if (validPos && validCol) {
+                points.add(new Vert(x, y, z, r*255, g*255, b*255)); // colors come in normalized
+              } else if (validPos && !validCol) {
+                points.add(new Vert(x, y, z));
+              }
             }
           }
           break;
