@@ -7,11 +7,11 @@ class DBDataPoint {
 
   float distance = 0.0;
   int clusterId = 0;
-  PVector co = new PVector(0,0,0);
+  Vert co = new Vert(0,0,0);
   
   DBDataPoint() { }
 
-  DBDataPoint(PVector _point) { 
+  DBDataPoint(Vert _point) { 
     co = _point;
   }
 
@@ -88,13 +88,13 @@ class DBSCAN {
     init();
   }
   
-  DBSCAN(ArrayList<PVector> _points) {
+  DBSCAN(ArrayList<Vert> _points) {
     init();
     setPoints(_points);    
     cluster();
   }
 
-  DBSCAN(ArrayList<PVector> _points, float _max_distance, int _min_points) {
+  DBSCAN(ArrayList<Vert> _points, float _max_distance, int _min_points) {
     max_distance = _max_distance;
     min_points = _min_points;  
     init();
@@ -107,8 +107,8 @@ class DBSCAN {
     clusters = new ArrayList<DBCluster>();      
   }
   
-  void setPoints(ArrayList<PVector> _points) {
-    for (PVector p : _points) {
+  void setPoints(ArrayList<Vert> _points) {
+    for (Vert p : _points) {
       points.add(new DBDataPoint(p));
     }
     

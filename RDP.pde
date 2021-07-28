@@ -15,11 +15,11 @@ class RDP {
     return pow(n, 2);
   }
 
-  float distanceBetweenPoints(PVector v, PVector w) {
+  float distanceBetweenPoints(Vert v, Vert w) {
     return pow(sqr(v.x - w.x) + sqr(v.y - w.y) + sqr(v.z - w.z), 0.5);
   }
 
-  float distanceToSegmentSquared(PVector p, PVector v, PVector w) {
+  float distanceToSegmentSquared(Vert p, Vert v, Vert w) {
     float l2 = distanceBetweenPoints(v, w);
     if (l2 == 0) 
       return distanceBetweenPoints(p, v);
@@ -28,14 +28,14 @@ class RDP {
       return distanceBetweenPoints(p, v);
     if (t > 1) 
       return distanceBetweenPoints(p, w);
-    return distanceBetweenPoints(p, new PVector ((v.x + t * (w.x - v.x)), (v.y + t * (w.y - v.y)), (v.z + t * (w.z - v.z))));
+    return distanceBetweenPoints(p, new Vert ((v.x + t * (w.x - v.x)), (v.y + t * (w.y - v.y)), (v.z + t * (w.z - v.z))));
   }
 
-  float perpendicularDistance(PVector p, PVector v, PVector w) {
+  float perpendicularDistance(Vert p, Vert v, Vert w) {
     return sqrt(distanceToSegmentSquared(p, v, w));
   }
 
-  void douglasPeucker(ArrayList<PVector> list, int s, int e, float epsilon, ArrayList<PVector> resultList) {
+  void douglasPeucker(ArrayList<Vert> list, int s, int e, float epsilon, ArrayList<Vert> resultList) {
     // Find the point with the maximum distance
     float dmax = 0;
     int index = 0;
@@ -43,9 +43,9 @@ class RDP {
     int start = s;
     int end = e-1;
     for (int i=start+1; i<end; i++) {      
-      PVector p = list.get(i); // Point    
-      PVector v = list.get(start); // Start
-      PVector w = list.get(end); // End
+      Vert p = list.get(i); // Point    
+      Vert v = list.get(start); // Start
+      Vert w = list.get(end); // End
       
       float d = perpendicularDistance(p, v, w); 
       if (d > dmax) {
@@ -82,8 +82,8 @@ class RDP {
    * @param epsilon Distance dimension
    * @return Similar curve with fewer points
    */
-  ArrayList<PVector> douglasPeucker(ArrayList<PVector> list, float epsilon) {
-    ArrayList<PVector> resultList = new ArrayList<PVector>();
+  ArrayList<Vert> douglasPeucker(ArrayList<Vert> list, float epsilon) {
+    ArrayList<Vert> resultList = new ArrayList<Vert>();
     douglasPeucker(list, 0, list.size(), epsilon, resultList);
     return resultList;
   }

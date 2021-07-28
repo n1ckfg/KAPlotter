@@ -2,7 +2,7 @@ import latkProcessing.*;
 
 class PointCloud {
   
-  ArrayList<PVector> points;
+  ArrayList<Vert> points;
   ArrayList<Integer> colors;
   
   String ext = "unknown";
@@ -10,7 +10,7 @@ class PointCloud {
   boolean nativeObjHandling = false;
   
   PointCloud(String url) {
-    points = new ArrayList<PVector>();
+    points = new ArrayList<Vert>();
     colors = new ArrayList<Integer>();
     
     ext = getExtension(url);
@@ -40,14 +40,14 @@ class PointCloud {
   }
   
   void loadFromShape(String url) {
-    points = new ArrayList<PVector>();
+    points = new ArrayList<Vert>();
     
     if (ext.equals("obj") && nativeObjHandling) {
       PShape shp = loadShape(url);
   
       // first get root vertices
       for (int i=0; i<shp.getVertexCount(); i++) {
-        PVector p = shp.getVertex(i).mult(globalScaler);
+        Vert p = new Vert(shp.getVertex(i).mult(globalScaler));
         points.add(p);
       }
       
@@ -55,7 +55,7 @@ class PointCloud {
       for (int i=0; i<shp.getChildCount(); i++) {
         PShape child = shp.getChild(i);
         for (int j=0; j<child.getVertexCount(); j++) {
-          PVector p = child.getVertex(j).mult(globalScaler);
+          Vert p = new Vert(child.getVertex(j).mult(globalScaler));
           points.add(p);
         }
       }  
@@ -76,7 +76,7 @@ class PointCloud {
               y = float(words[2]);
               z = float(words[3]);
               validPos = !Float.isNaN(x) && !Float.isNaN(y) && !Float.isNaN(z);
-              if (validPos) points.add(new PVector(x, y, z));
+              if (validPos) points.add(new Vert(x, y, z));
 
               if (validPos && words.length > 4) {
                 r = float(words[4]);
@@ -97,7 +97,7 @@ class PointCloud {
   }
   
   void loadFromBinvox(String url) {
-    points = new ArrayList<PVector>();
+    points = new ArrayList<Vert>();
     byte bytesData[] = loadBytes(url);
     int readpos = 0;
     int dimpos = 0;
@@ -177,7 +177,7 @@ class PointCloud {
       for (int yy = 0; yy < dimY; yy++) {
         for (int zz = 0; zz < dimZ; zz++) {
           if (voxels[xx][yy][zz] == 1) {
-            points.add(new PVector(xx, -zz, yy));
+            points.add(new Vert(xx, -zz, yy));
           }
         }
       }
@@ -200,7 +200,7 @@ class PointCloud {
     int index = 0;   
 
     for (int i=0; i<points.size(); i++) {
-      PVector p = points.get(i);
+      Vert p = points.get(i);
       float x = p.x;
       float y = p.y;
       float z = p.z;
@@ -253,7 +253,7 @@ class PointCloud {
     int index = 0;   
 
     for (int i=0; i<points.size(); i++) {
-      PVector p = points.get(i);
+      Vert p = points.get(i);
       float x = p.x;
       float y = p.y;
       float z = p.z;
@@ -274,7 +274,7 @@ class PointCloud {
     String[] vertices = new String[points.size()];
 
     for (int i=0; i<points.size(); i++) {
-      PVector p = points.get(i);
+      Vert p = points.get(i);
       float x = p.x;
       float y = p.y;
       float z = p.z;

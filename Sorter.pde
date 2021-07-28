@@ -1,6 +1,6 @@
 class Sorter {
   
-  ArrayList<PVector> points;
+  ArrayList<Vert> points;
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
   RDP rdp;
@@ -8,18 +8,18 @@ class Sorter {
 
   Sorter(KCluster cluster) {
     rdp = new RDP();
-    points = new ArrayList<PVector>();
+    points = new ArrayList<Vert>();
     
     Collections.sort(cluster.points, new DistanceComparator(cluster.centroid)); // sort points by distance from centroid
 
-    ArrayList<PVector> input = new ArrayList<PVector>();
+    ArrayList<Vert> input = new ArrayList<Vert>();
     for (int i=0; i<cluster.points.size(); i+=increment) {
       input.add(cluster.points.get(i).copy());
     }
        
     int _root = input.size()-1; // start with the point furthest away from the centroid
     
-    PVector root = input.get(_root);
+    Vert root = input.get(_root);
     points.add(root);
     input.remove(_root);
     
@@ -51,7 +51,7 @@ class Sorter {
     noFill();
     beginShape(TRIANGLE_STRIP);
     for (int i=0; i<points.size(); i++) {
-      PVector p = points.get(i);
+      Vert p = points.get(i);
       vertex(p.x, p.y, p.z);
     }
     endShape();  
@@ -65,7 +65,7 @@ class Sorter {
     float weight = 18;
     float scale = 1.0 / (weight + 2);
     int nPointsMinusTwo = points.size() - 2;
-    PVector lower, upper, center;
+    Vert lower, upper, center;
 
     for (int i = 1; i < nPointsMinusTwo; i++) {
       lower = points.get(i-1);
@@ -79,12 +79,12 @@ class Sorter {
 
   void splitStroke() {
     for (int i = 1; i < points.size(); i+=2) {
-      PVector center = points.get(i);
-      PVector lower = points.get(i-1);
+      Vert center = points.get(i);
+      Vert lower = points.get(i-1);
       float x = (center.x + lower.x) / 2;
       float y = (center.y + lower.y) / 2;
       float z = (center.z + lower.z) / 2;
-      PVector p = new PVector(x, y, z);
+      Vert p = new Vert(x, y, z);
       points.add(i, p);
     }
   }
@@ -111,15 +111,15 @@ class Sorter {
 
 import java.util.Comparator;
 
-class DistanceComparator implements Comparator<PVector> {
+class DistanceComparator implements Comparator<Vert> {
 
-  PVector compareToVector;
+  Vert compareToVector;
 
-  DistanceComparator(PVector compareToVector) {
+  DistanceComparator(Vert compareToVector) {
     this.compareToVector = compareToVector;
   }
 
-  int compare(PVector v1, PVector v2) {
+  int compare(Vert v1, Vert v2) {
     float d1 = v1.dist(compareToVector);
     float d2 = v2.dist(compareToVector);
 

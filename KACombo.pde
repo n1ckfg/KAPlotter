@@ -8,7 +8,7 @@ class KACombo {
   float outputScaler = 0.1;
   boolean enableAstars = false;
   
-  KACombo(ArrayList<PVector> _points, int _numCentroids) {
+  KACombo(ArrayList<Vert> _points, int _numCentroids) {
     kmeans = new Kmeans(_points, _numCentroids);
     sorters = new ArrayList<Sorter>();
     astars = new ArrayList<Astar>();
@@ -49,7 +49,7 @@ class KACombo {
     // clean the list first
     for (int i=astars.size()-1; i>=0; i--) {
       Astar astar = astars.get(i);
-      PVector p = astar.inputCentroid;
+      Vert p = astar.inputCentroid;
       if (Float.isNaN(p.x) || Float.isNaN(p.y) || Float.isNaN(p.z) || astar.outputPoints.size() <= 0) {
         astars.remove(i);
       }
@@ -59,7 +59,7 @@ class KACombo {
     String nodeLabels = "";
     for (int i=0; i<astars.size(); i++) {
       Astar astar = astars.get(i);
-      PVector p = astar.inputCentroid.copy().mult(outputScaler);
+      Vert p = astar.inputCentroid.copy().mult(outputScaler);
       String ps = "[" + p.x + ", " + p.y + ", " + p.z + "]";
       if (i == astars.size()-1) {
         nodePositions += ps;
@@ -118,10 +118,10 @@ class KACombo {
       int[] endPoints = { int(endPointsS[0]), int(endPointsS[1]) };
       s.add("\t\t\t\"end_points\": [" +endPoints[0] + ", " + endPoints[1] + "],");
       
-      ArrayList<PVector> points = astars.get(endPoints[0]).outputPoints;
+      ArrayList<Vert> points = astars.get(endPoints[0]).outputPoints;
       String pointsS = "";
       for (int j=0; j<points.size(); j++) {
-        PVector p = points.get(j).copy().mult(outputScaler);
+        Vert p = points.get(j).copy().mult(outputScaler);
         String pS = "[" + p.x + ", " + p.y + ", " + p.z + "]";
         if (j != points.size()-1) pS += ", ";
         pointsS += pS;

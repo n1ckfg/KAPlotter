@@ -4,7 +4,7 @@ class Kmeans {
 
   ArrayList<KParticle> particles;
   ArrayList<KCentroid> centroids;
-  ArrayList<PVector> centroidFinalPositions;
+  ArrayList<Vert> centroidFinalPositions;
   ArrayList<KCluster> clusters;
   
   int numberOfCentroids;
@@ -18,15 +18,15 @@ class Kmeans {
   float stableThreshold = 0.0001;
   boolean ready = false;
 
-  Kmeans(ArrayList<PVector> _points, int _numCentroids) {
+  Kmeans(ArrayList<Vert> _points, int _numCentroids) {
     numberOfCentroids = _numCentroids;
     particles = new ArrayList<KParticle>();
     centroids = new ArrayList<KCentroid>();
-    centroidFinalPositions = new ArrayList<PVector>();
+    centroidFinalPositions = new ArrayList<Vert>();
     clusters = new ArrayList<KCluster>();
     
     for (int i=0; i<_points.size(); i++) {
-      PVector p = _points.get(i);
+      Vert p = _points.get(i);
       if (p.x < minX) minX = p.x;
       if (p.x > maxX) maxX = p.x;
       if (p.y < minY) minY = p.y;
@@ -65,7 +65,7 @@ class Kmeans {
     
     if (totalStability < stableThreshold) {
       for (int i=0; i<centroids.size(); i++) {
-        PVector p = centroids.get(i).position;
+        Vert p = centroids.get(i).position;
         clusters.add(new KCluster(p));
         centroidFinalPositions.add(p);
       }
@@ -104,13 +104,13 @@ class Kmeans {
 
 class KCentroid {
 
-  PVector position;
+  Vert position;
   float colorR, colorG, colorB;
   int internalIndex;
   float stability;
 
   KCentroid(int _internalIndex, float _r, float _g, float _b, float _minX, float _maxX, float _minY, float _maxY, float _minZ, float _maxZ) {
-    position = new PVector(random(_minX, _maxX), random(_minY, _maxY), random(_minZ, _maxZ));
+    position = new Vert(random(_minX, _maxX), random(_minY, _maxY), random(_minZ, _maxZ));
     colorR = _r;
     colorG = _g;
     colorB = _b;
@@ -123,7 +123,7 @@ class KCentroid {
     //println("K-Means KCentroid Tick");
     // move the centroid to its new position
 
-    PVector newPosition = new PVector(0.0, 0.0);
+    Vert newPosition = new Vert(0.0, 0.0);
 
     float numberOfAssociatedParticles = 0;
 
@@ -158,13 +158,13 @@ class KCentroid {
 
 class KParticle {
 
-  PVector position;
-  PVector velocity;
+  Vert position;
+  Vert velocity;
   int centroidIndex;
   float colorR, colorG, colorB;
   float brightness = 0.8;
 
-  KParticle(PVector _position) {
+  KParticle(Vert _position) {
     position = _position;
   }
 
@@ -208,12 +208,12 @@ class KParticle {
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  class KCluster {
  
-   ArrayList<PVector> points;
-   PVector centroid;
+   ArrayList<Vert> points;
+   Vert centroid;
    
-   KCluster(PVector _centroid) {
+   KCluster(Vert _centroid) {
      centroid = _centroid;
-     points = new ArrayList<PVector>();
+     points = new ArrayList<Vert>();
    }
    
  }

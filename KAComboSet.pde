@@ -7,7 +7,7 @@ class KAComboSet {
   boolean savePointClouds = false;
   KACombo[] kaCombos;
   
-  KAComboSet(ArrayList<PVector>_points, int _iterations, int _interval) {
+  KAComboSet(ArrayList<Vert>_points, int _iterations, int _interval) {
     latkGenerated = false;
     iterations = _iterations;
     interval = _interval;
@@ -41,7 +41,7 @@ class KAComboSet {
     for (KACombo kaCombo : kaCombos) {
       for (Sorter sorter : kaCombo.sorters) {
         ArrayList<LatkPoint> lpArray = new ArrayList<LatkPoint>();
-        for (PVector p : sorter.points) {
+        for (Vert p : sorter.points) {
           //p.y *= -1;
           LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10));
           lpArray.add(lp);

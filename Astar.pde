@@ -17,19 +17,19 @@ class Astar {
   int searchReps = 10;
   float avgDistance = 0;
   float weightScale = 10;
-  ArrayList<PVector> outputPoints;
-  PVector inputCentroid;
+  ArrayList<Vert> outputPoints;
+  Vert inputCentroid;
   int smoothReps = globalSmoothReps;
   int splitReps = globalSplitReps;
   float addOdds = 0.4;
   RDP rdp;
 
   // h-score is the straight-line distance from the current point to the centroid
-  Astar(ArrayList<PVector> _points, PVector _centroid) {
+  Astar(ArrayList<Vert> _points, Vert _centroid) {
     rdp = new RDP();
     inputCentroid = _centroid;
     nodes = new ArrayList<Node>();
-    outputPoints = new ArrayList<PVector>();
+    outputPoints = new ArrayList<Vert>();
     
     nodes.add(new Node("0", 0)); // centroid
     
@@ -77,7 +77,7 @@ class Astar {
     noFill();
     beginShape(TRIANGLE_STRIP);
     for (int j=0; j<outputPoints.size(); j++) {
-      PVector p = outputPoints.get(j);
+      Vert p = outputPoints.get(j);
       vertex(p.x, p.y, p.z);
     }
     endShape();  
@@ -91,7 +91,7 @@ class Astar {
     float weight = 18;
     float scale = 1.0 / (weight + 2);
     int nPointsMinusTwo = outputPoints.size() - 2;
-    PVector lower, upper, center;
+    Vert lower, upper, center;
 
     for (int i = 1; i < nPointsMinusTwo; i++) {
       lower = outputPoints.get(i-1);
@@ -105,12 +105,12 @@ class Astar {
 
   void splitStroke() {
     for (int i = 1; i < outputPoints.size(); i+=2) {
-      PVector center = outputPoints.get(i);
-      PVector lower = outputPoints.get(i-1);
+      Vert center = outputPoints.get(i);
+      Vert lower = outputPoints.get(i-1);
       float x = (center.x + lower.x) / 2;
       float y = (center.y + lower.y) / 2;
       float z = (center.z + lower.z) / 2;
-      PVector p = new PVector(x, y, z);
+      Vert p = new Vert(x, y, z);
       outputPoints.add(i, p);
     }
   }
