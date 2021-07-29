@@ -10,7 +10,7 @@ PointCloud pc;
 
 float globalScaler = 1000;
 
-int globalComboIterations = 20;
+int globalComboIterations = 10;
 int globalComboInterval = 40;
 int globalSmoothReps = 1000;
 int globalSplitReps = 4;
@@ -56,7 +56,7 @@ void draw() {
 }
 
 void init() {
-  println("Rendering " + urlCounter + " / " + urls.length + "...");
+  println("Rendering " + urlCounter + " / " + urls.length + " ...");
   pc = new PointCloud(urls[urlCounter]);
   
   kaComboSet = new KAComboSet(pc.points, globalComboIterations, globalComboInterval); 
