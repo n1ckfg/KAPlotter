@@ -47,8 +47,10 @@ class KAComboSet {
           LatkPoint lp = new LatkPoint(parent, p.div(globalScaler/10), p.col);
           lpArray.add(lp);
         }
-        LatkStroke ls = new LatkStroke(parent, lpArray, color(127));
-        frame.strokes.add(ls);
+        if (lpArray.size() >= globalMinStrokeSize) {
+          LatkStroke ls = new LatkStroke(parent, lpArray, color(127));
+          frame.strokes.add(ls);
+        }
       }
     }
     latk.layers.get(0).frames.add(frame);   
