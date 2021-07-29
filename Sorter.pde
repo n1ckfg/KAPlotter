@@ -52,6 +52,7 @@ class Sorter {
     beginShape(TRIANGLE_STRIP);
     for (int i=0; i<points.size(); i++) {
       Vert p = points.get(i);
+      //stroke(p.col);
       vertex(p.x, p.y, p.z);
     }
     endShape();  

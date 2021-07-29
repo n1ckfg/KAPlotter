@@ -10,16 +10,16 @@ PointCloud pc;
 
 float globalScaler = 1000;
 
-int globalComboIterations = 10;
+int globalComboIterations = 2;
 int globalComboInterval = 40;
-int globalSmoothReps = 1000;
-int globalSplitReps = 4;
-float globalRdpEpsilon = 0.1; //0.8;
+int globalSmoothReps = 50;
+int globalSplitReps = 1;
+float globalRdpEpsilon = 0.5; //0.8;
 int globalMinStrokeSize = 10;
 
 String[] urls;
 int urlCounter = 0;
-int frameLimit = 5;
+int frameLimit = 9999;
 
 PApplet parent;
 
@@ -62,7 +62,11 @@ void draw() {
 }
 
 void init() {
-  println("Rendering " + urlCounter + " / " + urls.length + " ...");
+  if (urls.length > frameLimit) {
+    println("Rendering " + (urlCounter + 1) + " / " + frameLimit + " ...");
+  } else {
+    println("Rendering " + (urlCounter + 1) + " / " + urls.length + " ...");
+  }
   pc = new PointCloud(urls[urlCounter]);
   
   kaComboSet = new KAComboSet(pc.points, globalComboIterations, globalComboInterval); 
