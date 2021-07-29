@@ -19,7 +19,7 @@ int globalMinStrokeSize = 10;
 
 String[] urls;
 int urlCounter = 0;
-int frameLimit = 24;
+int frameLimit = 5;
 
 PApplet parent;
 
@@ -39,7 +39,13 @@ void setup() {
 void draw() {
   background(0);
   
-  if (pc.valid) kaComboSet.run();
+  if (pc.valid) {
+    pushMatrix();
+    translate(-width/8, height/4, 0);
+    scale(1,-1,1);
+    kaComboSet.run();
+    popMatrix();
+  }
   
   if (!pc.valid || kaComboSet.latkGenerated) {   
     urlCounter++;
