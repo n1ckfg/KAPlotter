@@ -51,12 +51,12 @@ class Vert extends PVector {
     col = _col;
   }
   
-  @Override
+  //@Override
   Vert copy() {
     return new Vert(x, y, z, col);
   }
 
-  @Override
+  //@Override
   Vert mult(float f) {
     return new Vert(new PVector(x, y, z).mult(f), col);
   }
